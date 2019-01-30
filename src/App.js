@@ -99,6 +99,7 @@ class App extends Component {
               path='/details/:currency'
               render={(props) =>
                 <Details {...props} currencies={this.state.currencies}
+                                    rates={this.state.rates}
                                     onDefaultCurrencyChange={this.makeDefaultCurrency} />}
             />
           </div>
