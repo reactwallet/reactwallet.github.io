@@ -1,15 +1,10 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
-import BottomNavigation from '@material-ui/core/BottomNavigation'
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
-import { Add, Remove, CompareArrows } from '@material-ui/icons'
-import Typography from '@material-ui/core/Typography'
-
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -17,7 +12,6 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Divider from '@material-ui/core/Divider'
 
-import { Link } from 'react-router-dom'
 import DepositDialog from './DepositDialog'
 import WithdrawDialog from './WithdrawDialog'
 import ExchangeDialog from './ExchangeDialog'
@@ -32,15 +26,8 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     justifyContent: 'space-evenly'
   },
-  button: {
-    margin: theme.spacing.unit,
-  },
   makeDefaultLink: {
-    textDecoration: 'none',
-    display: 'inline-block'
-  },
-  amount: {
-    textAlign: 'right'
+    textDecoration: 'none'
   },
   term: {
     maxWidth: '10em'
@@ -70,11 +57,11 @@ class Details extends Component {
   }
 
   render() {
-    const { classes } = this.props
-    const paramCurrency = this.props.match.params.currency
-    const currency = this.props.currencies.find((currency) => currency.symbol === paramCurrency)
+    const { classes, ...props } = this.props
+    const paramCurrency = props.match.params.currency
+    const currency = props.currencies.find((currency) => currency.symbol === paramCurrency)
 
-    const currencyRatesArr = Object.entries(this.props.rates[paramCurrency] || {}).sort((a, b) => {
+    const currencyRatesArr = Object.entries(props.rates[paramCurrency] || {}).sort((a, b) => {
       return a[0] > b[0] ? 1 : -1
     })
 
@@ -99,9 +86,9 @@ class Details extends Component {
         <Divider/>
 
         <div className={classes.actions}>
-          <DepositDialog />
-          <WithdrawDialog />
-          <ExchangeDialog />
+          <DepositDialog {...props} />
+          <WithdrawDialog {...props} />
+          <ExchangeDialog {...props} />
         </div>
         <Divider/>
 

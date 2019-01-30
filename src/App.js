@@ -49,27 +49,28 @@ class App extends Component {
       })
   }
 
-  addNewCurrency = (currency) => {
+  addNewCurrency = (newCurrency) => {
+    this.fetchCurrencyRates(newCurrency)
     if (!this.state.currencies.length) {
-      currency.isDefault = true
+      newCurrency.isDefault = true
     }
     this.setState((state, props) => {
-      const currencies = [...state.currencies, currency]
+      const currencies = [...state.currencies, newCurrency]
 
       saveCurrenciesToLocalStorage(currencies)
       return { currencies }
     })
   }
 
-  makeDefaultCurrency = (newDefault) => {
-    this.fetchCurrencyRates(newDefault)
+  makeDefaultCurrency = (defaultCurrency) => {
+    this.fetchCurrencyRates(defaultCurrency)
 
     this.setState((state, props) => {
       let currencies = state.currencies.map((currency) => {
         if (currency.isDefault) {
           delete currency.isDefault
         }
-        if (currency.symbol === newDefault.symbol) {
+        if (currency.symbol === defaultCurrency.symbol) {
           currency.isDefault = true
         }
         return currency
@@ -78,6 +79,61 @@ class App extends Component {
       saveCurrenciesToLocalStorage(currencies)
       return { currencies }
     })
+  }
+
+  makeDeposit = (depositCurrency) => {
+    this.setState((state, props) => {
+      const currencies = state.currencies.map((currency) => {
+        if (currency.symbol === depositCurrency.symbol) {
+          currency.value = Number(currency.value) + depositCurrency.value
+        }
+        return currency
+      })
+
+      saveCurrenciesToLocalStorage(currencies)
+      return { currencies }
+    })
+  }
+
+  makeWithdraw = (withdrawCurrency) => {
+    this.setState((state, props) => {
+      const currencies = state.currencies.map((currency) => {
+        if (currency.symbol === withdrawCurrency.symbol) {
+          currency.value = Math.max(0, Number(currency.value) - withdrawCurrency.value)
+        }
+        return currency
+      })
+
+      saveCurrenciesToLocalStorage(currencies)
+      return { currencies }
+    })
+  }
+
+  makeExchange = (fromCurrency, toCurrency) => {
+    if (fromCurrency.value > 0) {
+      const fromCurrencyRates = this.state.rates[fromCurrency.symbol] || {}
+      const fromToRate = fromCurrencyRates[toCurrency.symbol]
+      if (!fromToRate) {
+        alert('No rate for this, please try again. If that doesn\'t help, refresh the page')
+        return
+      }
+
+      this.setState((state, props) => {
+        const currencies = state.currencies.map((currency) => {
+          if (currency.symbol === fromCurrency.symbol) {
+            currency.value = Math.max(0, Number(currency.value) - fromCurrency.value)
+          }
+
+          if (currency.symbol === toCurrency.symbol) {
+            currency.value = Number(currency.value) + fromCurrency.value * fromToRate
+          }
+          return currency
+        })
+
+        saveCurrenciesToLocalStorage(currencies)
+        return { currencies }
+      })
+    }
   }
 
   render() {
@@ -89,18 +145,20 @@ class App extends Component {
           <div>
             <Header currencies={this.state.currencies}
                     onAddNewCurrency={this.addNewCurrency} />
-            <Route
-              path='/' exact
-              render={() =>
+            <Route exact
+                   path='/'
+                   render={() =>
                 <CurrencyList currencies={this.state.currencies}
                               rates={this.state.rates} />}
             />
-            <Route
-              path='/details/:currency'
-              render={(props) =>
+            <Route path='/details/:currency'
+                   render={(props) =>
                 <Details {...props} currencies={this.state.currencies}
                                     rates={this.state.rates}
-                                    onDefaultCurrencyChange={this.makeDefaultCurrency} />}
+                                    onDefaultCurrencyChange={this.makeDefaultCurrency}
+                                    onDeposit={this.makeDeposit}
+                                    onWithdraw={this.makeWithdraw}
+                                    onExchange={this.makeExchange} />}
             />
           </div>
         </Router>
