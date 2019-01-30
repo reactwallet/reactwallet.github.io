@@ -11,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { Link } from 'react-router-dom'
 
 import AddCurrencyDialog from './AddCurrencyDialog'
+import ResetDialog from './ResetDialog'
 
 const styles = {
   grow: {
@@ -19,6 +20,9 @@ const styles = {
   link: {
     textDecoration: 'none',
     color: 'inherit'
+  },
+  menuItem: {
+    minWidth: '120px'
   }
 }
 
@@ -46,7 +50,6 @@ class Header extends React.Component {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             <Link to="/" className={classes.link}>React Wallet</Link>
           </Typography>
-          <AddCurrencyDialog {...props} />
           <IconButton
             aria-owns={menuAnchorEl ? 'simple-menu' : undefined}
             aria-haspopup="true"
@@ -61,12 +64,9 @@ class Header extends React.Component {
             open={Boolean(menuAnchorEl)}
             onClose={this.handleClose}
           >
-            {/* <MenuItem onClick={this.handleClose}>Add Currency</MenuItem> */}
-            {/* <MenuItem onClick={this.handleClose}> */}
-              {/* <AddCurrencyDialog handleClick={this.handleClose} /> */}
-            {/* </MenuItem> */}
-            <MenuItem onClick={this.handleClose}>History [todo]</MenuItem>
-            <MenuItem onClick={this.handleClose}>Reset Data [todo]</MenuItem>
+            <MenuItem component={AddCurrencyDialog} {...props} onClose={this.handleClose} className={classes.menuItem}>Add Currency</MenuItem>
+            <MenuItem component={Link} to="/history" onClick={this.handleClose} className={classes.menuItem}>History</MenuItem>
+            <MenuItem component={ResetDialog} {...props} onClose={this.handleClose} className={classes.menuItem}>Reset Data</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

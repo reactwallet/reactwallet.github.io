@@ -1,22 +1,16 @@
+import moment from 'moment'
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
 
 import CurrencyList from './CurrencyList'
 import Details from './Details'
 import Header from './Header'
+import HistoryList from './HistoryList'
 
-const styles = {
-
-}
-
-function saveCurrenciesToLocalStorage(currencies) {
-  localStorage.setItem('reactWalletCurrencies', JSON.stringify(currencies))
-}
-
-function saveRatesToLocalStorage(rates) {
-  localStorage.setItem('reactWalletRates', JSON.stringify(rates))
+function saveToLocalStorage(data) {
+  Object.keys(data).forEach(function (item) {
+    localStorage.setItem('reactwallet' + item, JSON.stringify(data[item]))
+  })
 }
 
 class App extends Component {
@@ -24,8 +18,9 @@ class App extends Component {
     super(props)
 
     this.state = {
-      currencies: JSON.parse(localStorage.getItem('reactWalletCurrencies')) || [],
-      rates: JSON.parse(localStorage.getItem('reactWalletRates')) || {}
+      currencies: JSON.parse(localStorage.getItem('reactwalletcurrencies')) || [],
+      rates: JSON.parse(localStorage.getItem('reactwalletrates')) || {},
+      history: JSON.parse(localStorage.getItem('reactwallethistory')) || []
     }
   }
 
@@ -41,10 +36,12 @@ class App extends Component {
       .then((res) => res.json())
       .then((json) => {
         if (json.base) {
-          this.setState((state, props) => ({
-            rates: {...state.rates, [json.base]: json.rates}
-          }))
-          saveRatesToLocalStorage(this.state.rates)
+          this.setState((state, props) => {
+            let rates = {...state.rates, [json.base]: json.rates}
+
+            saveToLocalStorage({ rates })
+            return { rates }
+          })
         }
       })
   }
@@ -56,9 +53,13 @@ class App extends Component {
     }
     this.setState((state, props) => {
       const currencies = [...state.currencies, newCurrency]
+      const history = [...state.history, {
+        action: `Added ${newCurrency.symbol} with ${newCurrency.value} balance`,
+        date: moment().format()
+      }]
 
-      saveCurrenciesToLocalStorage(currencies)
-      return { currencies }
+      saveToLocalStorage({ currencies, history })
+      return { currencies, history }
     })
   }
 
@@ -66,7 +67,7 @@ class App extends Component {
     this.fetchCurrencyRates(defaultCurrency)
 
     this.setState((state, props) => {
-      let currencies = state.currencies.map((currency) => {
+      const currencies = state.currencies.map((currency) => {
         if (currency.isDefault) {
           delete currency.isDefault
         }
@@ -76,8 +77,13 @@ class App extends Component {
         return currency
       })
 
-      saveCurrenciesToLocalStorage(currencies)
-      return { currencies }
+      const history = [...state.history, {
+        action: `Made ${defaultCurrency.symbol} the default currency`,
+        date: moment().format()
+      }]
+
+      saveToLocalStorage({ currencies, history })
+      return { currencies, history }
     })
   }
 
@@ -90,8 +96,13 @@ class App extends Component {
         return currency
       })
 
-      saveCurrenciesToLocalStorage(currencies)
-      return { currencies }
+      const history = [...state.history, {
+        action: `Deposited ${depositCurrency.value} ${depositCurrency.symbol}`,
+        date: moment().format()
+      }]
+
+      saveToLocalStorage({ currencies, history })
+      return { currencies, history }
     })
   }
 
@@ -104,8 +115,13 @@ class App extends Component {
         return currency
       })
 
-      saveCurrenciesToLocalStorage(currencies)
-      return { currencies }
+      const history = [...state.history, {
+        action: `Withdrew ${withdrawCurrency.value} ${withdrawCurrency.symbol}`,
+        date: moment().format()
+      }]
+
+      saveToLocalStorage({ currencies, history })
+      return { currencies, history }
     })
   }
 
@@ -118,6 +134,8 @@ class App extends Component {
         return
       }
 
+      toCurrency.value = fromCurrency.value * fromToRate
+
       this.setState((state, props) => {
         const currencies = state.currencies.map((currency) => {
           if (currency.symbol === fromCurrency.symbol) {
@@ -125,52 +143,63 @@ class App extends Component {
           }
 
           if (currency.symbol === toCurrency.symbol) {
-            currency.value = Number(currency.value) + fromCurrency.value * fromToRate
+            currency.value = Number(currency.value) + toCurrency.value
           }
           return currency
         })
 
-        saveCurrenciesToLocalStorage(currencies)
-        return { currencies }
+        const history = [...state.history, {
+          action: `Exchanged ${fromCurrency.value} ${fromCurrency.symbol} for 
+            ${toCurrency.value} ${toCurrency.symbol}`,
+          date: moment().format()
+        }]
+
+        saveToLocalStorage({ currencies, history })
+        return { currencies, history }
       })
     }
   }
 
-  render() {
-    const { classes } = this.props
+  resetData = () => {
+    const empty = {
+      currencies: [],
+      rates: {},
+      history: []
+    }
+    saveToLocalStorage(empty)
+    this.setState(empty)
+  }
 
+  render() {
     return (
-      <div className={classes.root}>
-        <Router>
-          <div>
-            <Header currencies={this.state.currencies}
-                    onAddNewCurrency={this.addNewCurrency} />
-            <Route exact
-                   path='/'
-                   render={() =>
-                <CurrencyList currencies={this.state.currencies}
-                              rates={this.state.rates} />}
-            />
-            <Route path='/details/:currency'
-                   render={(props) =>
-                <Details {...props} currencies={this.state.currencies}
-                                    rates={this.state.rates}
-                                    onDefaultCurrencyChange={this.makeDefaultCurrency}
-                                    onDeposit={this.makeDeposit}
-                                    onWithdraw={this.makeWithdraw}
-                                    onExchange={this.makeExchange} />}
-            />
-          </div>
-        </Router>
-      </div>
+      <Router>
+        <>
+          <Header currencies={this.state.currencies}
+                  onResetData={this.resetData}
+                  onAddNewCurrency={this.addNewCurrency}
+          />
+          <Route exact
+                 path='/'
+                 render={() =>
+              <CurrencyList currencies={this.state.currencies}
+                            rates={this.state.rates} />}
+          />
+          <Route path='/history'
+                 render={() => <HistoryList history={this.state.history} />}
+          />
+          <Route path='/details/:currency'
+                render={(props) =>
+              <Details {...props} currencies={this.state.currencies}
+                                  rates={this.state.rates}
+                                  onDefaultCurrencyChange={this.makeDefaultCurrency}
+                                  onDeposit={this.makeDeposit}
+                                  onWithdraw={this.makeWithdraw}
+                                  onExchange={this.makeExchange} />}
+          />
+        </>
+      </Router>
     )
   }
 }
 
-App.propTypes = {
-  classes: PropTypes.object.isRequired,
-}
-
-export default withStyles(styles)(App)
-
-// export default App
+export default App
