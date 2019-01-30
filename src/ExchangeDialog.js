@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import { Remove } from '@material-ui/icons'
+import { CompareArrows } from '@material-ui/icons'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -10,7 +10,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import TextField from '@material-ui/core/TextField'
 
-const styles = theme => ({
+const styles = (theme) => ({
   dialog: {
     maxWidth: '80%',
     width: 450
@@ -95,7 +95,7 @@ class ExchangeDialog extends React.Component {
       <div className={classes.root}>
         <Button onClick={this.handleOpen} className={classes.actionButton} >
           Exchange
-          <Remove style={{ fontSize: 16, marginLeft: 6 }}/>
+          <CompareArrows style={{ fontSize: 16, marginLeft: 6 }}/>
         </Button>
         
         <Dialog

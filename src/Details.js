@@ -16,7 +16,7 @@ import DepositDialog from './DepositDialog'
 import WithdrawDialog from './WithdrawDialog'
 import ExchangeDialog from './ExchangeDialog'
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     margin: theme.spacing.unit * 3
   },

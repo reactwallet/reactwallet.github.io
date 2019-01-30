@@ -9,7 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import TextField from '@material-ui/core/TextField'
 
-const styles = theme => ({
+const styles = (theme) => ({
   dialog: {
     maxWidth: '80%',
     width: 450

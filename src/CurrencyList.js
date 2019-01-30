@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
 
-const styles = theme => ({
+const styles = (theme) => ({
   empty: {
     padding: theme.spacing.unit * 3,
     textAlign: 'center'
@@ -40,35 +40,37 @@ function CurrencyList(props) {
   }, 0)
 
   return (
-    props.currencies.length ?
-      <List component="nav">
-        {props.currencies.map((currency) =>
-          <React.Fragment key={currency.symbol}>
-            <Link to={'/details/' + currency.symbol}
-                  className={classes.linkListItem} >
-              <ListItem button classes={{ button: classes.listItemButton }}>
-                <ListItemText primary={currency.symbol} />
-                <ListItemText secondary={currency.isDefault ? 'Default': ''} />
-                <ListItemText primary={Number(currency.value).toFixed(2)}
-                              className={classes.amount} />
-              </ListItem>
-            </Link>
-            <Divider />
-          </React.Fragment>
-        )}
-        <ListItem className={classes.total}>
-          <ListItemText primary="Total"
-                        disableTypography={true} />
-          <ListItemText primary={total.toFixed(2) + ' ' + defaultCurrency.symbol}
-                        disableTypography={true}
-                        className={classes.amount} />
-        </ListItem>
-      </List>
-      :
-      <Typography variant="h5" gutterBottom className={classes.empty} >
-        Your wallet is empty. Add some currencies from the top menu.
-      </Typography>
-    
+    <>
+      { props.currencies.length > 0 ?
+        <List component="nav">
+          {props.currencies.map((currency) =>
+            <React.Fragment key={currency.symbol}>
+              <Link to={'/details/' + currency.symbol}
+                    className={classes.linkListItem} >
+                <ListItem button classes={{ button: classes.listItemButton }}>
+                  <ListItemText primary={currency.symbol} />
+                  <ListItemText secondary={currency.isDefault ? 'Default': ''} />
+                  <ListItemText primary={Number(currency.value).toFixed(2)}
+                                className={classes.amount} />
+                </ListItem>
+              </Link>
+              <Divider />
+            </React.Fragment>
+          )}
+          <ListItem className={classes.total}>
+            <ListItemText primary="Total"
+                          disableTypography={true} />
+            <ListItemText primary={total.toFixed(2) + ' ' + defaultCurrency.symbol}
+                          disableTypography={true}
+                          className={classes.amount} />
+          </ListItem>
+        </List>
+        :
+        <Typography variant="h5" gutterBottom className={classes.empty} >
+          Your wallet is empty. Add some currencies from the top menu.
+        </Typography>
+      }
+    </>
   )
 }
 

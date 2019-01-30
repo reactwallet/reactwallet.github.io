@@ -1,50 +1,42 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import { Add } from '@material-ui/icons'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import TextField from '@material-ui/core/TextField'
+import MenuItem from '@material-ui/core/MenuItem'
 
 const styles = (theme) => ({
   dialog: {
     maxWidth: '80%',
     width: 450
+  },
+  link: {
+    textDecoration: 'none'
   }
 })
 
-class DepositDialog extends React.Component {
+class ResetDialog extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      open: false,
-      value: ''
-    }
-  }
-
-  handleChange = () => event => {
-    this.setState({ value: Math.max(0, Number(event.target.value)) })
+    this.state = { open: false }
   }
 
   handleOpen = () => {
-    this.setState({
-      open: true,
-      value: ''
-    })
+    this.setState({ open: true })
   }
 
   handleClose = () => {
     this.setState({ open: false })
+    this.props.onClose()
   }
 
   handleSubmit = () => {
-    this.props.onDeposit({
-      symbol: this.props.match.params.currency,
-      value: this.state.value
-    })
+    this.props.onResetData()
     this.handleClose()
   }
 
@@ -53,35 +45,31 @@ class DepositDialog extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Button color="primary" onClick={this.handleOpen} >
-          Deposit
-          <Add style={{ fontSize: 16, marginLeft: 6 }}/>
-        </Button>
+        <MenuItem onClick={this.handleOpen} >
+          Reset
+        </MenuItem>
         
         <Dialog
           PaperProps={{className: classes.dialog}}
           open={this.state.open}
           onClose={this.handleClose}
-          aria-labelledby="deposit-dialog-title"
+          aria-labelledby="reset-dialog-title"
         >
-          <DialogTitle id="deposit-dialog-title">Deposit Currency</DialogTitle>
+          <DialogTitle id="reset-dialog-title">Reset Wallet</DialogTitle>
           <DialogContent>
-            <TextField
-              autoFocus
-              fullWidth
-              label="Amount"
-              type="number"
-              value={this.state.value}
-              onChange={this.handleChange('value')}
-            />
+            <DialogContentText className={classes.dialogText}>
+              Are you sure you want to reset the wallet data? This will remove all currencies, rates and history.
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose}>
               Cancel
             </Button>
-            <Button onClick={this.handleSubmit} color="primary">
-              Deposit
-            </Button>
+            <Link to="/" className={classes.link} >
+              <Button onClick={this.handleSubmit} color="secondary">
+                Reset
+              </Button>
+            </Link>
           </DialogActions>
         </Dialog>
       </div>
@@ -89,8 +77,8 @@ class DepositDialog extends React.Component {
   }
 }
 
-DepositDialog.propTypes = {
+ResetDialog.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(DepositDialog)
+export default withStyles(styles)(ResetDialog)

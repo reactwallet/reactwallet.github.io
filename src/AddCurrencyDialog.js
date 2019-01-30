@@ -7,14 +7,15 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
 
-const currencies = ['AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK',
+const allCurrencies = ['AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK',
 'EUR', 'GBP', 'HKD', 'HRK', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW',
 'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD', 'THB',
 'TRY', 'USD', 'ZAR']
 
-const styles = theme => ({
+const styles = (theme) => ({
   dialog: {
     maxWidth: '80%',
     width: 400
@@ -33,50 +34,52 @@ class AddCurrencyDialog extends React.Component {
     this.state = {
       open: false,
       symbol: 'EUR',
-      value: 0
+      value: ''
     }
   }
 
   handleChange = (name) => event => {
-    this.setState({ [name]: event.target.value })
+    let value = event.target.value
+    if (name === 'value') {
+      value = Math.max(0, Number(event.target.value))
+    }
+    this.setState({ [name]: value })
   }
 
   handleOpen = (event) => {
-    this.setState({ open: true })
+    this.setState({
+      open: true,
+      value: '',
+      symbol: this.getUnusedCurrencies()[0]
+    })
   }
 
   handleClose = () => {
     this.setState({ open: false })
+    this.props.onClose()
   }
 
   handleSubmit = () => {
-    const currencyExists = this.props.currencies.find((currency) => {
-      return currency.symbol === this.state.symbol
+    this.props.onAddNewCurrency({
+      symbol: this.state.symbol,
+      value: this.state.value || 0
     })
+    this.handleClose()
+  }
 
-    if (currencyExists) {
-      alert('This exists') // todo - make pretty
-    } else {
-      this.props.onAddNewCurrency({
-        symbol: this.state.symbol,
-        value: this.state.value
-      })
-      this.handleClose()
-    }
+  getUnusedCurrencies = () => {
+    const usedCurrencies = this.props.currencies.map((currency) => currency.symbol)
+    return [...allCurrencies].filter((currency) => !usedCurrencies.includes(currency))
   }
 
   render() {
     const { classes } = this.props
 
-    // const unusedCurrencies = currencies.reject((currency) => {
-
-    // })
-
     return (
-      <div>
-        <Button onClick={this.handleOpen}>Add Currency</Button>
-        {/* <MenuItem onClick={this.handleOpen}>Add Currency</MenuItem> */}
-        {/* <Typography onClick={this.handleOpen}>Add Currency</Typography> */}
+      <>
+        <MenuItem onClick={this.handleOpen} >
+          {this.props.children}
+        </MenuItem>
         <Dialog
           PaperProps={{className: classes.dialog}}
           open={this.state.open}
@@ -84,48 +87,58 @@ class AddCurrencyDialog extends React.Component {
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Add New Currency</DialogTitle>
+
           <DialogContent>
-            <DialogContentText className={classes.dialogText}>
-              Pick a new currency and add it to your wallet.
-            </DialogContentText>
+            { this.getUnusedCurrencies().length ?
+              <>
+                <DialogContentText className={classes.dialogText}>
+                  Pick a new currency and add it to your wallet.
+                </DialogContentText>
 
-            <TextField
-              select
-              autoFocus
-              label="Currency"
-              className={classes.select}
-              value={this.state.symbol}
-              onChange={this.handleChange('symbol')}
-              helperText="Please select your currency"
-              SelectProps={{
-                native: true
-              }}
-            >
-              {currencies.map(symbol => (
-                <option key={symbol} value={symbol}>
-                  {symbol}
-                </option>
-              ))}
-            </TextField>
+                <TextField
+                  select
+                  autoFocus
+                  label="Currency"
+                  className={classes.select}
+                  value={this.state.symbol}
+                  onChange={this.handleChange('symbol')}
+                  helperText="Please select your currency"
+                  SelectProps={{
+                    native: true
+                  }}
+                >
+                  {this.getUnusedCurrencies().map(symbol => (
+                    <option key={symbol} value={symbol}>
+                      {symbol}
+                    </option>
+                  ))}
+                </TextField>
 
-            <TextField
-              label="Amount (optinal)"
-              type="number"
-              value={this.state.value}
-              onChange={this.handleChange('value')}
-            />
-
+                <TextField
+                  label="Amount (optinal)"
+                  type="number"
+                  value={this.state.value}
+                  onChange={this.handleChange('value')}
+                />
+              </>
+              :
+              <DialogContentText className={classes.dialogText}>
+                There are no other currencies to add.
+              </DialogContentText>
+            }
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose}>
               Cancel
             </Button>
-            <Button onClick={this.handleSubmit} color="primary">
-              Add
-            </Button>
+            {this.getUnusedCurrencies().length &&
+              <Button onClick={this.handleSubmit} color="primary">
+                Add
+              </Button>
+            }
           </DialogActions>
         </Dialog>
-      </div>
+      </>
     )
   }
 }
