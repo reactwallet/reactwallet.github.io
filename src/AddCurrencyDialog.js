@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import TextField from '@material-ui/core/TextField'
 
@@ -14,8 +15,15 @@ const currencies = ['AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK',
 'TRY', 'USD', 'ZAR']
 
 const styles = theme => ({
+  dialog: {
+    maxWidth: '80%',
+    width: 400
+  },
+  dialogText: {
+    marginBottom: theme.spacing.unit * 3,
+  },
   select: {
-    marginRight: 24,
+    marginRight: theme.spacing.unit * 3,
   }
 })
 
@@ -29,8 +37,7 @@ class AddCurrencyDialog extends React.Component {
     }
   }
 
-  handleChange = name => event => {
-    console.log(name, event.target.value)
+  handleChange = (name) => event => {
     this.setState({ [name]: event.target.value })
   }
 
@@ -71,19 +78,20 @@ class AddCurrencyDialog extends React.Component {
         {/* <MenuItem onClick={this.handleOpen}>Add Currency</MenuItem> */}
         {/* <Typography onClick={this.handleOpen}>Add Currency</Typography> */}
         <Dialog
+          PaperProps={{className: classes.dialog}}
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Add New Currency</DialogTitle>
           <DialogContent>
-            {/* <DialogContentText>
-              To subscribe to this website, please enter your email address here. We will send
-              updates occasionally.
-            </DialogContentText> */}
+            <DialogContentText className={classes.dialogText}>
+              Pick a new currency and add it to your wallet.
+            </DialogContentText>
 
             <TextField
               select
+              autoFocus
               label="Currency"
               className={classes.select}
               value={this.state.symbol}
@@ -101,7 +109,6 @@ class AddCurrencyDialog extends React.Component {
             </TextField>
 
             <TextField
-              autoFocus
               label="Amount (optinal)"
               type="number"
               value={this.state.value}
