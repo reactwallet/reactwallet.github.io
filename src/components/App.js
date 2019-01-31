@@ -1,10 +1,11 @@
 import moment from 'moment'
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
+import ErrorPage from './ErrorPage'
 import CurrencyList from './CurrencyList'
-import Details from './Details'
-import Header from './Header'
+import Details from './details/Details'
+import Header from './header/Header'
 import HistoryList from './HistoryList'
 
 function saveToLocalStorage(data) {
@@ -178,24 +179,27 @@ class App extends Component {
                   onResetData={this.resetData}
                   onAddNewCurrency={this.addNewCurrency}
           />
-          <Route exact
-                 path='/'
-                 render={() =>
-              <CurrencyList currencies={this.state.currencies}
-                            rates={this.state.rates} />}
-          />
-          <Route path='/history'
-                 render={() => <HistoryList history={this.state.history} />}
-          />
-          <Route path='/details/:currency'
-                render={(props) =>
-              <Details {...props} currencies={this.state.currencies}
-                                  rates={this.state.rates}
-                                  onDefaultCurrencyChange={this.makeDefaultCurrency}
-                                  onDeposit={this.makeDeposit}
-                                  onWithdraw={this.makeWithdraw}
-                                  onExchange={this.makeExchange} />}
-          />
+          <Switch>
+            <Route exact
+                  path='/'
+                  render={() =>
+                <CurrencyList currencies={this.state.currencies}
+                              rates={this.state.rates} />}
+            />
+            <Route path='/history'
+                  render={() => <HistoryList history={this.state.history} />}
+            />
+            <Route path='/details/:currency'
+                  render={(props) =>
+                <Details {...props} currencies={this.state.currencies}
+                                    rates={this.state.rates}
+                                    onDefaultCurrencyChange={this.makeDefaultCurrency}
+                                    onDeposit={this.makeDeposit}
+                                    onWithdraw={this.makeWithdraw}
+                                    onExchange={this.makeExchange} />}
+            />
+            <Route component={ErrorPage} />
+          </Switch>
         </>
       </Router>
     )

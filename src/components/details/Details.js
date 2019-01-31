@@ -75,7 +75,8 @@ class Details extends Component {
         <ListItem>
           <ListItemText primary="Default Currency" className={classes.term} />
           <ListItemText primary={currency.isDefault ? 'Yes': 'No'} primaryTypographyProps={{className: classes.desc}} />
-          {!currency.isDefault &&
+          {
+            !currency.isDefault &&
             <Link to="/" className={classes.makeDefaultLink} >
               <Button size="small" onClick={this.handleDefaultChange} color="primary" variant="contained" >
                 Make {paramCurrency} Default
@@ -88,7 +89,10 @@ class Details extends Component {
         <div className={classes.actions}>
           <DepositDialog {...props} />
           <WithdrawDialog {...props} />
-          <ExchangeDialog {...props} />
+          {
+            props.currencies.length > 1 && 
+            <ExchangeDialog {...props} />
+          }
         </div>
         <Divider/>
 
