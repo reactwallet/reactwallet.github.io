@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography'
 const styles = (theme) => ({
   empty: {
     padding: theme.spacing.unit * 3,
+    paddingBottom: 0,
     textAlign: 'center'
   },
   linkListItem: {
@@ -66,9 +67,14 @@ function CurrencyList(props) {
           </ListItem>
         </List>
         :
-        <Typography variant="h5" gutterBottom className={classes.empty} >
-          Your wallet is empty. Add some currencies from the top menu.
-        </Typography>
+        <>
+          <Typography variant="h5" className={classes.empty} >
+            Your wallet is empty.
+          </Typography>
+          <Typography variant="h5" className={classes.empty} >
+            Add some currencies from the top menu.
+          </Typography>
+        </>
       }
     </>
   )

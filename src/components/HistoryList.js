@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography'
 const styles = (theme) => ({
   empty: {
     padding: theme.spacing.unit * 3,
+    paddingBottom: 0,
     textAlign: 'center'
   },
   right: {
@@ -37,9 +38,14 @@ function HistoryList(props) {
         )}
       </List>
       :
-      <Typography variant="h5" gutterBottom className={classes.empty} >
-        Your history is empty. Add some currencies and make some exchanges to populate the list.
-      </Typography>
+      <>
+        <Typography variant="h5" className={classes.empty} >
+          Your history is empty.
+        </Typography>
+        <Typography variant="h5" className={classes.empty} >
+          Add some currencies and make some exchanges to populate the list.
+        </Typography>
+      </>
   )
 }
 
