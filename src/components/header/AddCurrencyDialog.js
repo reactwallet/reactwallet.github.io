@@ -115,7 +115,7 @@ class AddCurrencyDialog extends React.Component {
                 </TextField>
 
                 <TextField
-                  label="Amount (optinal)"
+                  label="Amount (optional)"
                   type="number"
                   value={this.state.value}
                   onChange={this.handleChange('value')}
