@@ -1,5 +1,7 @@
 import moment from 'moment'
 import React from 'react'
+import { compose } from 'recompose'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Divider from '@material-ui/core/Divider'
@@ -19,10 +21,8 @@ const styles = (theme) => ({
   }
 })
 
-function HistoryList(props) {
-  const { classes } = props
-
-  const history = [...props.history].reverse()
+const HistoryList = (props) => {
+  const { classes, history } = props
   
   return (
     history.length ?
@@ -53,4 +53,11 @@ HistoryList.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(HistoryList)
+const mapStateToProps = (state) => ({
+  history: state.history
+})
+
+export default compose(
+  connect(mapStateToProps),
+  withStyles(styles)
+)(HistoryList)

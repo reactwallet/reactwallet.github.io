@@ -1,4 +1,7 @@
+import moment from 'moment'
 import React from 'react'
+import { connect } from 'react-redux'
+import { compose } from 'recompose'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { CompareArrows } from '@material-ui/icons'
@@ -9,6 +12,8 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import TextField from '@material-ui/core/TextField'
+
+import { makeExchange, addHistory } from '../../redux/actions'
 
 const styles = (theme) => ({
   dialog: {
@@ -72,14 +77,34 @@ class ExchangeDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    const fromCurrency = {
-      symbol: this.props.match.params.currency,
-      value: this.state.value
+    if (this.state.value > 0) {
+      const fromCurrency = {
+        symbol: this.props.match.params.currency,
+        value: this.state.value
+      }
+      const toCurrency = {
+        symbol: this.state.symbol
+      }
+
+      const fromCurrencyRates = this.props.rates[fromCurrency.symbol] || {}
+      const fromToRate = fromCurrencyRates[toCurrency.symbol]
+      if (!fromToRate) {
+        alert('No rate for this, please try again. If that doesn\'t help, refresh the page')
+        this.handleClose()
+        return
+      }
+      toCurrency.value = fromCurrency.value * fromToRate
+
+      this.props.makeExchange(fromCurrency, toCurrency)
+
+      this.props.addHistory({
+        action: `Exchanged ${fromCurrency.value} ${fromCurrency.symbol} for
+          ${toCurrency.value} ${toCurrency.symbol}`,
+        date: moment().format()
+      })
+
     }
-    const toCurrency = {
-      symbol: this.state.symbol
-    }
-    this.props.onExchange(fromCurrency, toCurrency)
+
     this.handleClose()
   }
 
@@ -151,4 +176,11 @@ ExchangeDialog.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(ExchangeDialog)
+const mapStateToProps = (state) => ({
+  rates: state.rates
+})
+
+export default compose(
+  connect(mapStateToProps, { makeExchange, addHistory }),
+  withStyles(styles)
+)(ExchangeDialog)

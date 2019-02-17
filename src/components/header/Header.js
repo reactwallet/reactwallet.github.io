@@ -41,7 +41,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { classes, ...props } = this.props
+    const { classes } = this.props
     const { menuAnchorEl } = this.state
 
     return (
@@ -64,9 +64,9 @@ class Header extends React.Component {
             open={Boolean(menuAnchorEl)}
             onClose={this.handleClose}
           >
-            <MenuItem component={AddCurrencyDialog} {...props} onClose={this.handleClose} className={classes.menuItem}>Add Currency</MenuItem>
+            <MenuItem component={AddCurrencyDialog} onClose={this.handleClose} className={classes.menuItem}>Add Currency</MenuItem>
             <MenuItem component={Link} to="/history" onClick={this.handleClose} className={classes.menuItem}>History</MenuItem>
-            <MenuItem component={ResetDialog} {...props} onClose={this.handleClose} className={classes.menuItem}>Reset Data</MenuItem>
+            <MenuItem component={ResetDialog} onClose={this.handleClose} className={classes.menuItem}>Reset Data</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

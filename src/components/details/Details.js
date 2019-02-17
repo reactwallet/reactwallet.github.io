@@ -1,4 +1,7 @@
+import moment from 'moment'
 import React, { Component } from 'react'
+import { compose } from 'recompose'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
@@ -12,6 +15,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Divider from '@material-ui/core/Divider'
 
+import { addHistory, fetchRates, makeDefaultCurrency } from '../../redux/actions'
 import DepositDialog from './DepositDialog'
 import WithdrawDialog from './WithdrawDialog'
 import ExchangeDialog from './ExchangeDialog'
@@ -45,15 +49,15 @@ class Details extends Component {
     }
   }
 
-  handleClick = (event, idxClicked) => {
-    console.log('clicked: ', idxClicked)
-  }
-
   handleDefaultChange = () => {
-    const currency = this.props.currencies.find((currency) => {
-      return currency.symbol === this.props.match.params.currency
+    const symbol = this.props.match.params.currency
+
+    this.props.fetchRates(symbol)
+    this.props.makeDefaultCurrency(symbol)
+    this.props.addHistory({
+      action: `Made ${symbol} the default currency`,
+      date: moment().format()
     })
-    this.props.onDefaultCurrencyChange(currency)
   }
 
   render() {
@@ -114,8 +118,6 @@ class Details extends Component {
             ))}
           </TableBody>
         </Table>
-
-        
       </div>
     )
   }
@@ -125,4 +127,12 @@ Details.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(Details)
+const mapStateToProps = (state) => ({
+  currencies: state.currencies,
+  rates: state.rates
+})
+
+export default compose(
+  withStyles(styles),
+  connect(mapStateToProps, { addHistory, fetchRates, makeDefaultCurrency }),
+)(Details)

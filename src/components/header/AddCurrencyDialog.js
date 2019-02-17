@@ -1,4 +1,7 @@
+import moment from 'moment'
 import React from 'react'
+import { connect } from 'react-redux'
+import { compose } from 'recompose'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -9,6 +12,8 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
+
+import { addCurrency, addHistory, fetchRates } from '../../redux/actions'
 
 const allCurrencies = ['AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK',
 'EUR', 'GBP', 'HKD', 'HRK', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW',
@@ -50,7 +55,7 @@ class AddCurrencyDialog extends React.Component {
     this.setState({
       open: true,
       value: '',
-      symbol: this.getUnusedCurrencies()[0]
+      symbol: this.props.currencies[0]
     })
   }
 
@@ -60,16 +65,21 @@ class AddCurrencyDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.onAddNewCurrency({
-      symbol: this.state.symbol,
-      value: this.state.value || 0
-    })
-    this.handleClose()
-  }
+    const value = this.state.value || 0
 
-  getUnusedCurrencies = () => {
-    const usedCurrencies = this.props.currencies.map((currency) => currency.symbol)
-    return [...allCurrencies].filter((currency) => !usedCurrencies.includes(currency))
+    this.props.fetchRates(this.state.symbol)
+
+    this.props.addCurrency({
+      symbol: this.state.symbol,
+      value: value
+    })
+
+    this.props.addHistory({
+      action: `Added ${this.state.symbol} with ${value} balance`,
+      date: moment().format()
+    })
+
+    this.handleClose()
   }
 
   render() {
@@ -89,7 +99,7 @@ class AddCurrencyDialog extends React.Component {
           <DialogTitle id="form-dialog-title">Add New Currency</DialogTitle>
 
           <DialogContent>
-            { this.getUnusedCurrencies().length ?
+            { this.props.currencies.length ?
               <>
                 <DialogContentText className={classes.dialogText}>
                   Pick a new currency and add it to your wallet.
@@ -107,7 +117,7 @@ class AddCurrencyDialog extends React.Component {
                     native: true
                   }}
                 >
-                  {this.getUnusedCurrencies().map(symbol => (
+                  {this.props.currencies.map(symbol => (
                     <option key={symbol} value={symbol}>
                       {symbol}
                     </option>
@@ -131,7 +141,7 @@ class AddCurrencyDialog extends React.Component {
             <Button onClick={this.handleClose}>
               Cancel
             </Button>
-            {this.getUnusedCurrencies().length &&
+            {this.props.currencies.length &&
               <Button onClick={this.handleSubmit} color="primary">
                 Add
               </Button>
@@ -147,4 +157,16 @@ AddCurrencyDialog.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(AddCurrencyDialog)
+const mapStateToProps = (state) => {
+  const usedCurrencies = state.currencies.map((currency) => currency.symbol)
+  const unusedCurrencies = [...allCurrencies].filter((currency) => !usedCurrencies.includes(currency))
+
+  return {
+    currencies: unusedCurrencies
+  }
+}
+
+export default compose(
+  connect(mapStateToProps, { addCurrency, addHistory, fetchRates }),
+  withStyles(styles)
+)(AddCurrencyDialog)
