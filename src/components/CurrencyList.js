@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { compose } from 'recompose'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
@@ -84,4 +86,12 @@ CurrencyList.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(CurrencyList)
+const mapStateToProps = (state) => ({
+  currencies: state.currencies,
+  rates: state.rates
+})
+
+export default compose(
+  withStyles(styles),
+  connect(mapStateToProps)
+)(CurrencyList)

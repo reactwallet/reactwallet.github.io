@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { compose } from 'recompose'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
@@ -9,6 +11,8 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import MenuItem from '@material-ui/core/MenuItem'
+
+import { resetData } from '../../redux/actions'
 
 const styles = (theme) => ({
   dialog: {
@@ -36,7 +40,7 @@ class ResetDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.onResetData()
+    this.props.resetData()
     this.handleClose()
   }
 
@@ -81,4 +85,7 @@ ResetDialog.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(ResetDialog)
+export default compose(
+  withStyles(styles),
+  connect(null, { resetData })
+)(ResetDialog)

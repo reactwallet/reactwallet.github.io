@@ -1,4 +1,7 @@
+import moment from 'moment'
 import React from 'react'
+import { connect } from 'react-redux'
+import { compose } from 'recompose'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { Remove } from '@material-ui/icons'
@@ -8,6 +11,8 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import TextField from '@material-ui/core/TextField'
+
+import { makeWithdrawal, addHistory } from '../../redux/actions'
 
 const styles = (theme) => ({
   dialog: {
@@ -53,10 +58,16 @@ class WithdrawDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.onWithdraw({
+    this.props.makeWithdrawal({
       symbol: this.props.match.params.currency,
       value: this.state.value
     })
+
+    this.props.addHistory({
+      action: `Withdrew ${this.state.value} ${this.props.match.params.currency}`,
+      date: moment().format()
+    })
+
     this.handleClose()
   }
 
@@ -105,4 +116,7 @@ WithdrawDialog.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(WithdrawDialog)
+export default compose(
+  connect(null, { makeWithdrawal, addHistory }),
+  withStyles(styles)
+)(WithdrawDialog)
