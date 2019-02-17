@@ -1,3 +1,7 @@
+# React Wallet
+
+[![Build Status](https://travis-ci.org/reactwallet/reactwallet.github.io.svg?branch=source)](https://travis-ci.org/reactwallet/reactwallet.github.io)
+
 Deployed for demo purposes at https://reactwallet.github.io/.
 
 React Wallet is a simple PoC for a web app made with React and Redux. It is bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [Material-UI](https://material-ui.com).
