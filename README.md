@@ -1,4 +1,6 @@
-React Wallet is a simple web app bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [Material-UI](https://material-ui.com).
+Deployed for demo purposes at https://reactwallet.github.io/.
+
+React Wallet is a simple PoC for a web app made with React and Redux. It is bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [Material-UI](https://material-ui.com).
 
 In the app we can add and store multiple currencies each with its own balance. For each currency we can `Deposit` and `Withdraw` funds as well as `Exchange` to another currency that we have previously added.
 
@@ -6,9 +8,7 @@ We can set a default currency which will be used for calculating the total balan
 
 All actions and data are saved in the `localStorage` so that everything is available after refreshing the browser. The `History` page shows all actions that we've made. And the `Reset Data` button will remove everything from the state and the localStorage.
 
-There are a lot of things that can be optimized (adding full test coverage, reusing some components by composing new, extracting some common styles, etc.) but that's it for now.
-
-The app is deployed for demo purposes at https://reactwallet.gitlab.io/.
+Tests are incomplete and shown just as an example.
 
 ## Available Scripts
 
