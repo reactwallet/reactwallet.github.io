@@ -2,9 +2,8 @@ import { uniqueId } from '../../lib/helpers'
 
 const initialState = [
   'Cash',
-  'Bank Accounts',
-  'Cards',
-  'Credit Cards',
+  'Cards & Bank Accounts',
+  'Debts',
   'Investments',
   'Others'
 ].map((name) => ({

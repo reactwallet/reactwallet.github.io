@@ -14,7 +14,7 @@ it('renders with no history', async () => {
       <HistoryList />
     </Provider>
   )
-  expect(queryByText('Your history is empty.')).toBeTruthy()
+  expect(queryByText('Your history is empty')).toBeTruthy()
   expect(queryByText('Added new account')).toBeNull()
 })
 
@@ -30,6 +30,6 @@ it('renders with history', async () => {
       <HistoryList />
     </Provider>
   )
-  expect(queryByText('Your history is empty.')).toBeNull()
+  expect(queryByText('Your history is empty')).toBeNull()
   expect(queryByText('Added new account')).toBeTruthy()
 })

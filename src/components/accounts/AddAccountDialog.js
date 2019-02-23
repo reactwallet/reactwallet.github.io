@@ -76,6 +76,7 @@ class AddAccountDialog extends React.Component {
 
       if (!this.props.rates[this.state.currency]) {
         this.props.fetchRates(this.state.currency)
+        this.props.fetchRates(this.props.defaultCurrency)
       }
 
       this.props.addAccount({

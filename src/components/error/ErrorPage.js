@@ -6,15 +6,20 @@ import Typography from '@material-ui/core/Typography'
 
 const styles = (theme) => ({
   empty: {
-    padding: theme.spacing.unit * 3,
+    paddingTop: theme.spacing.unit * 3,
     textAlign: 'center'
   }
 })
 
 const ErrorPage = ({ classes }) => (
-  <Typography variant="h5" className={classes.empty} >
-    Page not found. You can start from <Link to="/">here</Link>.
-  </Typography>
+  <>
+    <Typography variant="h5" className={classes.empty} >
+      Page not found
+    </Typography>
+    <Typography variant="subtitle1" className={classes.empty} >
+      You can start from <Link to="/">here</Link>
+    </Typography>
+  </>
 )
 
 ErrorPage.propTypes = {

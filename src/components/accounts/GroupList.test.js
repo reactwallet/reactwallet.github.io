@@ -17,7 +17,7 @@ it('renders with no accounts', async () => {
       </Router>
     </Provider>
   )
-  expect(queryByText('Your wallet is empty.')).toBeTruthy()
+  expect(queryByText('Your wallet is empty')).toBeTruthy()
   expect(queryByText('Total')).toBeNull()
 })
 
@@ -54,5 +54,5 @@ it('renders with accounts', async () => {
   expect(queryByText('10.00 BGN')).toBeTruthy()
   expect(queryByText('Total')).toBeTruthy()
   expect(queryByText('20.00 BGN')).toBeTruthy()
-  expect(queryByText('Your wallet is empty.')).toBeNull()
+  expect(queryByText('Your wallet is empty')).toBeNull()
 })
