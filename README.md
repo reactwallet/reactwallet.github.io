@@ -2,13 +2,13 @@
 
 [![Build Status](https://travis-ci.org/reactwallet/reactwallet.github.io.svg?branch=source)](https://travis-ci.org/reactwallet/reactwallet.github.io)
 
-Deployed for demo purposes at https://reactwallet.github.io/.
+React Wallet is deployed for demo purposes at https://reactwallet.github.io/.
 
-React Wallet is a simple PoC for a web app made with React and Redux. It is bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [Material-UI](https://material-ui.com).
+This is a MVP for a web app made with React and Redux. It is bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [Material-UI](https://material-ui.com).
 
-In the app we can add and store multiple currencies each with its own balance. For each currency we can `Deposit` and `Withdraw` funds as well as `Exchange` to another currency that we have previously added.
+In the app we can add and store multiple accounts each with its own balance and its own currency. For each accounts we can `Deposit` and `Withdraw` funds as well as `Transfer` to another account. Accounts are grouped into a few predefined group categories.
 
-We can set a default currency which will be used for calculating the total balance from all available currencies in the wallet. Currency rates are fetched from the [Exchange Rates API](https://exchangeratesapi.io/) when the app is loaded or when new currency is added.
+The currency for the first account we create will be set as a default currency and will be used for calculating the total balance from all available accounts and a balance for each group. Currency rates are fetched from the [Exchange Rates API](https://exchangeratesapi.io/) when the app is loaded or when an account with a new currency is added.
 
 All actions and data are saved in the `localStorage` so that everything is available after refreshing the browser. The `History` page shows all actions that we've made. And the `Reset Data` button will remove everything from the state and the localStorage.
 

@@ -1,13 +1,17 @@
 import { combineReducers } from 'redux'
 
-import currencies from './currencies'
+import accounts from './accounts'
+import groups from './groups'
 import history from './history'
 import rates from './rates'
+import settings from './settings'
 
 const allReducers = combineReducers({
-  currencies,
+  accounts,
+  groups,
   history,
-  rates
+  rates,
+  settings
 })
 
 export default (state, action) => {

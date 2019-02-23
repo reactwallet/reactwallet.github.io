@@ -10,8 +10,8 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { Link } from 'react-router-dom'
 
-import AddCurrencyDialog from './AddCurrencyDialog'
-import ResetDialog from './ResetDialog'
+import AddAccountDialog from './accounts/AddAccountDialog'
+import ResetDialog from './settings/ResetDialog'
 
 const styles = {
   grow: {
@@ -37,6 +37,7 @@ class Header extends React.Component {
   }
 
   handleClose = () => {
+    // todo: fix this
     this.setState({ menuAnchorEl: null })
   }
 
@@ -64,7 +65,7 @@ class Header extends React.Component {
             open={Boolean(menuAnchorEl)}
             onClose={this.handleClose}
           >
-            <MenuItem component={AddCurrencyDialog} onClose={this.handleClose} className={classes.menuItem}>Add Currency</MenuItem>
+            <MenuItem component={AddAccountDialog} onClose={this.handleClose} className={classes.menuItem}>Add Account</MenuItem>
             <MenuItem component={Link} to="/history" onClick={this.handleClose} className={classes.menuItem}>History</MenuItem>
             <MenuItem component={ResetDialog} onClose={this.handleClose} className={classes.menuItem}>Reset Data</MenuItem>
           </Menu>

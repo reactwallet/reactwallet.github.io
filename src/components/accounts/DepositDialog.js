@@ -17,7 +17,7 @@ import { makeDeposit, addHistory } from '../../redux/actions'
 const styles = (theme) => ({
   dialog: {
     maxWidth: '80%',
-    width: 450
+    width: 300
   }
 })
 
@@ -47,12 +47,13 @@ class DepositDialog extends React.Component {
 
   handleSubmit = () => {
     this.props.makeDeposit({
-      symbol: this.props.match.params.currency,
+      accountId: this.props.account.id,
       value: this.state.value
     })
 
     this.props.addHistory({
-      action: `Deposited ${this.state.value} ${this.props.match.params.currency}`,
+      text: `Deposited ${this.state.value} ${this.props.account.currency} to\
+        ${this.props.account.name}`,
       date: moment().format()
     })
 
@@ -63,7 +64,7 @@ class DepositDialog extends React.Component {
     const { classes } = this.props
 
     return (
-      <div className={classes.root}>
+      <>
         <Button color="primary" onClick={this.handleOpen} >
           Deposit
           <Add style={{ fontSize: 16, marginLeft: 6 }}/>
@@ -75,7 +76,7 @@ class DepositDialog extends React.Component {
           onClose={this.handleClose}
           aria-labelledby="deposit-dialog-title"
         >
-          <DialogTitle id="deposit-dialog-title">Deposit Currency</DialogTitle>
+          <DialogTitle id="deposit-dialog-title">Deposit Funds</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
@@ -95,13 +96,16 @@ class DepositDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </>
     )
   }
 }
 
 DepositDialog.propTypes = {
-  classes: PropTypes.object.isRequired
+  account: PropTypes.object.isRequired,
+  addHistory: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  makeDeposit: PropTypes.func.isRequired
 }
 
 export default compose(

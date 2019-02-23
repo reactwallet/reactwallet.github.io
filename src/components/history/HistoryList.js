@@ -21,36 +21,33 @@ const styles = (theme) => ({
   }
 })
 
-const HistoryList = (props) => {
-  const { classes, history } = props
-  
-  return (
-    history.length ?
-      <List component="nav">
-        {history.map((el, key) =>
-          <React.Fragment key={key}>
-            <ListItem>
-              <ListItemText primary={el.action} />
-              <ListItemText primary={moment(el.date).calendar()} className={classes.right} />
-            </ListItem>
-            <Divider />
-          </React.Fragment>
-        )}
-      </List>
-      :
-      <>
-        <Typography variant="h5" className={classes.empty} >
-          Your history is empty.
-        </Typography>
-        <Typography variant="h5" className={classes.empty} >
-          Add some currencies and make some exchanges to populate the list.
-        </Typography>
-      </>
-  )
-}
+const HistoryList = ({ classes, history }) => (
+  history.length ?
+    <List component="nav">
+      {history.map((el, key) =>
+        <React.Fragment key={key}>
+          <ListItem>
+            <ListItemText primary={el.text} />
+            <ListItemText primary={moment(el.date).calendar()} className={classes.right} />
+          </ListItem>
+          <Divider />
+        </React.Fragment>
+      )}
+    </List>
+    :
+    <>
+      <Typography variant="h5" className={classes.empty} >
+        Your history is empty.
+      </Typography>
+      <Typography variant="h5" className={classes.empty} >
+        Add some accounts and make some transfers to populate the list.
+      </Typography>
+    </>
+)
 
 HistoryList.propTypes = {
   classes: PropTypes.object.isRequired,
+  history: PropTypes.array.isRequired,
 }
 
 const mapStateToProps = (state) => ({

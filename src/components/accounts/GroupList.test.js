@@ -4,16 +4,16 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { render } from 'react-testing-library'
 import { createStore } from 'redux'
 
-import CurrencyList from './CurrencyList'
-import reducer from '../redux/reducers/index'
+import GroupList from './GroupList'
+import reducer from '../../redux/reducers/index'
 
-it('renders with no currencies', async () => {
+it('renders with no accounts', async () => {
   const store = createStore(reducer)
 
   const { queryByText } = render(
     <Provider store={store}>
       <Router>
-        <CurrencyList />
+        <GroupList />
       </Router>
     </Provider>
   )
@@ -21,11 +21,14 @@ it('renders with no currencies', async () => {
   expect(queryByText('Total')).toBeNull()
 })
 
-it('renders with currencies', async () => {
+it('renders with accounts', async () => {
   const store = createStore(reducer, {
-    currencies: [
-      { symbol: 'BGN', value: 10, isDefault: true },
-      { symbol: 'EUR', value: 5 }
+    accounts: [
+      { name: 'acc 1', id: '_a1', currency: 'BGN', value: 10, groupId: '_g1' },
+      { name: 'acc 2', id: '_a2', currency: 'EUR', value: 5, groupId: '_g1' }
+    ],
+    groups: [
+      { id: '_g1', name: 'Cash' }
     ],
     rates: {
       EUR: {
@@ -34,16 +37,21 @@ it('renders with currencies', async () => {
       BGN: {
         EUR: 0.5
       }
+    },
+    settings: {
+      defaultCurrency: 'BGN'
     }
   })
 
   const { queryByText } = render(
     <Provider store={store}>
       <Router>
-        <CurrencyList />
+        <GroupList />
       </Router>
     </Provider>
   )
+  expect(queryByText('5.00 EUR')).toBeTruthy()
+  expect(queryByText('10.00 BGN')).toBeTruthy()
   expect(queryByText('Total')).toBeTruthy()
   expect(queryByText('20.00 BGN')).toBeTruthy()
   expect(queryByText('Your wallet is empty.')).toBeNull()

@@ -17,7 +17,7 @@ import { makeWithdrawal, addHistory } from '../../redux/actions'
 const styles = (theme) => ({
   dialog: {
     maxWidth: '80%',
-    width: 450
+    width: 300
   }
 })
 
@@ -33,12 +33,9 @@ class WithdrawDialog extends React.Component {
   handleChange = () => event => {
     let value = event.target.value
 
-    this.setState((state, props) => {  
-      const formCurrency = props.currencies.find((currency) => {
-        return currency.symbol === props.match.params.currency
-      })
+    this.setState((state, props) => {
       value = Math.max(0, Number(value))
-      value = Math.min(value, formCurrency.value)
+      value = Math.min(value, props.account.value)
 
       return { value }
     })
@@ -52,19 +49,18 @@ class WithdrawDialog extends React.Component {
   }
 
   handleClose = () => {
-    this.setState({
-      open: false
-    })
+    this.setState({ open: false })
   }
 
   handleSubmit = () => {
     this.props.makeWithdrawal({
-      symbol: this.props.match.params.currency,
+      accountId: this.props.account.id,
       value: this.state.value
     })
 
     this.props.addHistory({
-      action: `Withdrew ${this.state.value} ${this.props.match.params.currency}`,
+      text: `Withdrew ${this.state.value} ${this.props.account.currency} from\
+        ${this.props.account.name}`,
       date: moment().format()
     })
 
@@ -75,7 +71,7 @@ class WithdrawDialog extends React.Component {
     const { classes } = this.props
 
     return (
-      <div className={classes.root}>
+      <>
         <Button color="secondary" onClick={this.handleOpen} >
           Withdraw
           <Remove style={{ fontSize: 16, marginLeft: 6 }}/>
@@ -87,7 +83,7 @@ class WithdrawDialog extends React.Component {
           onClose={this.handleClose}
           aria-labelledby="withdraw-dialog-title"
         >
-          <DialogTitle id="withdraw-dialog-title">Withdraw Currency</DialogTitle>
+          <DialogTitle id="withdraw-dialog-title">Withdraw Funds</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
@@ -107,13 +103,16 @@ class WithdrawDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </>
     )
   }
 }
 
 WithdrawDialog.propTypes = {
-  classes: PropTypes.object.isRequired
+  account: PropTypes.object.isRequired,
+  addHistory: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  makeWithdrawal: PropTypes.func.isRequired
 }
 
 export default compose(

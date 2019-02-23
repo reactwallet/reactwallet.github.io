@@ -62,7 +62,7 @@ class ResetDialog extends React.Component {
           <DialogTitle id="reset-dialog-title">Reset Wallet</DialogTitle>
           <DialogContent>
             <DialogContentText className={classes.dialogText}>
-              Are you sure you want to reset the wallet data? This will remove all currencies, rates and history.
+              Are you sure you want to reset the wallet data? This will remove all accounts, rates and history.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -82,7 +82,9 @@ class ResetDialog extends React.Component {
 }
 
 ResetDialog.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired,
+  resetData: PropTypes.func.isRequired
 }
 
 export default compose(
