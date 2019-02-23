@@ -4,6 +4,22 @@ export default (state = [], action) => {
       return [...state, action.payload]
     }
 
+    case 'EDIT_ACCOUNT': {
+      return state.map((account) => {
+        if (account.id === action.payload.id) {
+          return {
+            ...account,
+            ...action.payload
+          }
+        }
+        return account
+      })
+    }
+
+    case 'DELETE_ACCOUNT': {
+      return state.filter((account) => account.id !== action.payload)
+    }
+
     case 'MAKE_DEPOSIT': {
       return state.map((account) => {
         if (account.id === action.payload.accountId) {

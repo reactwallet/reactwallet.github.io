@@ -1,7 +1,8 @@
+import moment from 'moment'
 import React from 'react'
 import { connect } from 'react-redux'
-import { compose } from 'recompose'
 import { Link } from 'react-router-dom'
+import { compose } from 'recompose'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -10,9 +11,10 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import MenuItem from '@material-ui/core/MenuItem'
+import DeleteIcon from '@material-ui/icons/Delete'
+import IconButton from '@material-ui/core/IconButton'
 
-import { resetData } from '../../redux/actions'
+import { deleteAccount, addHistory } from '../../redux/actions'
 
 const styles = (theme) => ({
   dialog: {
@@ -24,23 +26,30 @@ const styles = (theme) => ({
   }
 })
 
-class ResetDialog extends React.Component {
+class DeleteAccountDialog extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { open: false }
+    this.state = {
+      open: false
+    }
   }
 
-  handleOpen = () => {
+  handleOpen = (event) => {
     this.setState({ open: true })
   }
 
   handleClose = () => {
     this.setState({ open: false })
-    this.props.onClose()
   }
 
   handleSubmit = () => {
-    this.props.resetData()
+    this.props.deleteAccount(this.props.account.id)
+
+    this.props.addHistory({
+      text: `Removed account ${this.props.account.name}`,
+      date: moment().format()
+    })
+
     this.handleClose()
   }
 
@@ -48,46 +57,48 @@ class ResetDialog extends React.Component {
     const { classes } = this.props
 
     return (
-      <div className={classes.root}>
-        <MenuItem onClick={this.handleOpen} >
-          Reset
-        </MenuItem>
-        
+      <>
+        <IconButton className={classes.button} aria-label="Delete" onClick={this.handleOpen} >
+          <DeleteIcon />
+        </IconButton>
         <Dialog
           PaperProps={{className: classes.dialog}}
           open={this.state.open}
           onClose={this.handleClose}
-          aria-labelledby="reset-dialog-title"
+          aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="reset-dialog-title">Reset Wallet</DialogTitle>
+          <DialogTitle id="form-dialog-title">Delete Account</DialogTitle>
           <DialogContent>
-            <DialogContentText className={classes.dialogText}>
-              Are you sure you want to reset the wallet data? This will remove all accounts, rates and history.
+            <DialogContentText className={classes.dense}>
+              This action will remove both the account and its
+              balance and cannot be undone.<br/><br/>
+              Are you sure?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose}>
               Cancel
             </Button>
-            <Link to="/" className={classes.buttonLink} >
+            <Link to="/" className={classes.buttonLink}>
               <Button onClick={this.handleSubmit} color="secondary">
-                Reset
+                Delete
               </Button>
             </Link>
           </DialogActions>
         </Dialog>
-      </div>
+      </>
     )
   }
 }
 
-ResetDialog.propTypes = {
+DeleteAccountDialog.propTypes = {
+  account: PropTypes.object.isRequired,
+  deleteAccount: PropTypes.func.isRequired,
+  addHistory: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  onClose: PropTypes.func.isRequired,
-  resetData: PropTypes.func.isRequired
 }
 
 export default compose(
-  withStyles(styles),
-  connect(null, { resetData })
-)(ResetDialog)
+  connect(null, { deleteAccount, addHistory }),
+  withStyles(styles)
+)(DeleteAccountDialog)

@@ -1,28 +1,21 @@
-export const addAccount = (payload) => ({
-  type: 'ADD_ACCOUNT',
-  payload
-})
-
+// Account actions
 export const toggleGroup = (payload) => ({
   type: 'TOGGLE_GROUP',
   payload
 })
 
-export const addHistory = (payload) => ({
-  type: 'ADD_HISTORY',
+export const addAccount = (payload) => ({
+  type: 'ADD_ACCOUNT',
   payload
 })
 
-export const resetData = () => ({
-  type: 'RESET_DATA'
+export const editAccount = (payload) => ({
+  type: 'EDIT_ACCOUNT',
+  payload
 })
 
-export const loadDemoData = () => ({
-  type: 'LOAD_DEMO_DATA'
-})
-
-export const changeDefaultCurrency = (payload) => ({
-  type: 'CHANGE_DEFAULT_CURRENCY',
+export const deleteAccount = (payload) => ({
+  type: 'DELETE_ACCOUNT',
   payload
 })
 
@@ -41,17 +34,38 @@ export const makeTransfer = (payload) => ({
   payload
 })
 
-// Currently there is no reducer for the failure
-export const fetchRatesFailure = (error) => ({
-  type: 'FETCH_RATES_FAILURE',
-  payload: error
+// History actions
+export const addHistory = (payload) => ({
+  type: 'ADD_HISTORY',
+  payload
 })
 
+// Settings actions
+export const resetData = () => ({
+  type: 'RESET_DATA'
+})
+
+export const loadDemoData = () => ({
+  type: 'LOAD_DEMO_DATA'
+})
+
+export const changeDefaultCurrency = (payload) => ({
+  type: 'CHANGE_DEFAULT_CURRENCY',
+  payload
+})
+
+// Rates actions
 export const fetchRatesSuccess = (payload) => ({
   type: 'FETCH_RATES_SUCCESS',
   payload: {
     [payload.base]: payload.rates
   }
+})
+
+// Currently there is no reducer for the failure
+export const fetchRatesFailure = (error) => ({
+  type: 'FETCH_RATES_FAILURE',
+  payload: error
 })
 
 export const fetchRates = (currency) => {
