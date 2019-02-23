@@ -17,6 +17,10 @@ export const resetData = () => ({
   type: 'RESET_DATA'
 })
 
+export const loadDemoData = () => ({
+  type: 'LOAD_DEMO_DATA'
+})
+
 export const changeDefaultCurrency = (payload) => ({
   type: 'CHANGE_DEFAULT_CURRENCY',
   payload

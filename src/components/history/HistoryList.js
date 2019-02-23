@@ -37,10 +37,10 @@ const HistoryList = ({ classes, history }) => (
     :
     <>
       <Typography variant="h5" className={classes.empty} >
-        Your history is empty.
+        Your history is empty
       </Typography>
-      <Typography variant="h5" className={classes.empty} >
-        Add some accounts and make some transfers to populate the list.
+      <Typography variant="subtitle1" className={classes.empty} >
+        Add some accounts and make some transfers to populate the list
       </Typography>
     </>
 )

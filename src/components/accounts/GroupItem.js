@@ -3,18 +3,16 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import Collapse from '@material-ui/core/Collapse'
 import Divider from '@material-ui/core/Divider'
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 
-
-import Collapse from '@material-ui/core/Collapse'
-import ExpandLess from '@material-ui/icons/ExpandLess'
-import ExpandMore from '@material-ui/icons/ExpandMore'
-
 import AccountItem from './AccountItem'
-import { getTotalBalance } from '../../lib/helpers'
+import TotalBalanceOrProgress from '../common/TotalBalanceOrProgress'
 import { toggleGroup } from '../../redux/actions'
 
 const styles = (theme) => ({
@@ -33,7 +31,7 @@ class GroupItem extends React.Component {
   }
 
   render() {
-    const { accounts, rates, classes, defaultCurrency, group } = this.props
+    const { accounts, classes, group } = this.props
 
     return (
       <>
@@ -43,7 +41,7 @@ class GroupItem extends React.Component {
             <ListItem button onClick={this.handleClick}>
               <ListItemText primary={group.name} />
               <span className={classes.total}>
-                {getTotalBalance(accounts, rates, defaultCurrency)}
+                <TotalBalanceOrProgress accounts={accounts} />
               </span>
               {group.collapsed ? <ExpandMore /> : <ExpandLess />}
             </ListItem>
@@ -68,18 +66,14 @@ class GroupItem extends React.Component {
 GroupItem.propTypes = {
   accounts: PropTypes.array.isRequired,
   classes: PropTypes.object.isRequired,
-  defaultCurrency: PropTypes.string.isRequired,
   group: PropTypes.object.isRequired,
-  rates: PropTypes.object.isRequired,
   toggleGroup: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state, ownProps) => ({
   accounts: state.accounts.filter((account) => {
     return account.groupId === ownProps.group.id
-  }).sort((a, b) => a.name > b.name ? 1 : -1),
-  defaultCurrency: state.settings.defaultCurrency,
-  rates: state.rates
+  }).sort((a, b) => a.name > b.name ? 1 : -1)
 })
 
 export default compose(

@@ -15,6 +15,7 @@ import Divider from '@material-ui/core/Divider'
 import DepositDialog from './DepositDialog'
 import WithdrawDialog from './WithdrawDialog'
 import TransferDialog from './TransferDialog'
+import { fetchRates } from '../../redux/actions'
 
 const styles = (theme) => ({
   root: {
@@ -34,7 +35,11 @@ const styles = (theme) => ({
   }
 })
 
-const Details = ({ account, classes, hasOtherAccounts, rates }) => {
+const Details = ({ account, classes, fetchRates, hasOtherAccounts, rates }) => {
+  if (!rates[account.currency]) {
+    fetchRates(account.currency)
+  }
+
   const currencyRatesArr = Object.entries(rates[account.currency] || {}).sort((a, b) => {
     return a[0] > b[0] ? 1 : -1
   })
@@ -89,6 +94,7 @@ const Details = ({ account, classes, hasOtherAccounts, rates }) => {
 Details.propTypes = {
   account: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
+  fetchRates: PropTypes.func.isRequired,
   hasOtherAccounts: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
   rates: PropTypes.object.isRequired,
@@ -102,5 +108,5 @@ const mapStateToProps = (state, ownProps) => ({
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, {  }),
+  connect(mapStateToProps, { fetchRates }),
 )(Details)

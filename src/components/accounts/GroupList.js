@@ -1,15 +1,18 @@
+import moment from 'moment'
 import React from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
 
 import GroupItem from './GroupItem'
-import { getTotalBalance } from '../../lib/helpers'
+import TotalBalanceOrProgress from '../common/TotalBalanceOrProgress'
+import { addHistory, fetchRates, loadDemoData } from '../../redux/actions'
 
 
 const styles = (theme) => ({
@@ -21,48 +24,77 @@ const styles = (theme) => ({
   total: {
     fontWeight: 'bold',
     paddingRight: theme.spacing.unit * 7
+  },
+  loadButton: {
+    ...theme.typography.subtitle1,
+    textTransform: 'none',
+    textDecoration: 'underline',
+    padding: 0,
+    minWidth: 'auto',
+    color: '#0000EE',
+
+    '&:hover': {
+      backgroundColor: 'transparent'
+    }
   }
 })
 
-const GroupList = ({ classes, groups, hasAccounts, total }) => (
-  <>
-    { hasAccounts ?
-      <List component="nav">
-        {groups.map((group) =>
-          <GroupItem key={group.id} group={group} />
-        )}
-        <ListItem className={classes.total}>
-          <ListItemText primary="Total" disableTypography={true} />
-          {total}
-        </ListItem>
-      </List>
-      :
-      <>
-        <Typography variant="h5" className={classes.empty} >
-          Your wallet is empty.
-        </Typography>
-        <Typography variant="h5" className={classes.empty} >
-          Add some accounts from the top menu.
-        </Typography>
-      </>
-    }
-  </>
-)
+const GroupList = ({ addHistory, classes, groups, hasAccounts, loadDemoData, fetchRates }) => {
+  const handleOnClick = (e) => {
+    loadDemoData()
+    fetchRates('USD')
+    addHistory({
+      text: 'Loaded the wallet with the demo data',
+      date: moment().format()
+    })
+  }
+
+  return (
+    <>
+      { hasAccounts ?
+        <List component="nav">
+          {groups.map((group) =>
+            <GroupItem key={group.id} group={group} />
+          )}
+          <ListItem className={classes.total}>
+            <ListItemText primary="Total" disableTypography={true} />
+            <TotalBalanceOrProgress />
+          </ListItem>
+        </List>
+        :
+        <>
+          <Typography variant="h5" className={classes.empty} >
+            Your wallet is empty
+          </Typography>
+          <Typography variant="subtitle1" className={classes.empty} >
+            Add accounts from the top menu or<br/>
+            <Button color="primary" onClick={handleOnClick} className={classes.loadButton}>
+              load
+            </Button>
+            &nbsp;
+            some dummy data for demo purposes
+          </Typography>
+        </>
+      }
+    </>
+  )
+}
 
 GroupList.propTypes = {
+  addHistory: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
+  fetchRates: PropTypes.func.isRequired,
   groups: PropTypes.array.isRequired,
   hasAccounts: PropTypes.bool.isRequired,
-  total: PropTypes.string.isRequired
+  loadDemoData: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
   hasAccounts: state.accounts.length > 0,
-  groups: state.groups,
-  total: getTotalBalance(state.accounts, state.rates, state.settings.defaultCurrency)
+  groups: state.groups
 })
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps)
+  connect(mapStateToProps, { addHistory, fetchRates, loadDemoData })
 )(GroupList)
