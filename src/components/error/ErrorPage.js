@@ -11,15 +11,11 @@ const styles = (theme) => ({
   }
 })
 
-function ErrorPage(props) {
-  const { classes } = props
-  
-  return (
-    <Typography variant="h5" className={classes.empty} >
-      Page not found. You can start from <Link to="/">here</Link>.
-    </Typography>
-  )
-}
+const ErrorPage = ({ classes }) => (
+  <Typography variant="h5" className={classes.empty} >
+    Page not found. You can start from <Link to="/">here</Link>.
+  </Typography>
+)
 
 ErrorPage.propTypes = {
   classes: PropTypes.object.isRequired,

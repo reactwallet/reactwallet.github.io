@@ -5,7 +5,7 @@ import thunk from 'redux-thunk'
 import reducer from './reducers/index'
 
 const initialState = {
-  currencies: [],
+  accounts: [],
   history: [],
   rates: {},
   ...JSON.parse(localStorage.getItem('reactwallet'))

@@ -1,5 +1,10 @@
-export const addCurrency = (payload) => ({
-  type: 'ADD_CURRENCY',
+export const addAccount = (payload) => ({
+  type: 'ADD_ACCOUNT',
+  payload
+})
+
+export const toggleGroup = (payload) => ({
+  type: 'TOGGLE_GROUP',
   payload
 })
 
@@ -12,25 +17,24 @@ export const resetData = () => ({
   type: 'RESET_DATA'
 })
 
-export const makeDefaultCurrency = (currencySymbol) => ({
-  type: 'MAKE_DEFAULT_CURRENCY',
-  currencySymbol
+export const changeDefaultCurrency = (payload) => ({
+  type: 'CHANGE_DEFAULT_CURRENCY',
+  payload
 })
 
-export const makeDeposit = (depositCurrency) => ({
+export const makeDeposit = (payload) => ({
   type: 'MAKE_DEPOSIT',
-  depositCurrency
+  payload
 })
 
-export const makeWithdrawal = (withdrawCurrency) => ({
+export const makeWithdrawal = (payload) => ({
   type: 'MAKE_WITHDRAWAL',
-  withdrawCurrency
+  payload
 })
 
-export const makeExchange = (fromCurrency, toCurrency) => ({
-  type: 'MAKE_EXCHANGE',
-  fromCurrency,
-  toCurrency
+export const makeTransfer = (payload) => ({
+  type: 'MAKE_TRANSFER',
+  payload
 })
 
 // Currently there is no reducer for the failure
@@ -46,8 +50,8 @@ export const fetchRatesSuccess = (payload) => ({
   }
 })
 
-export const fetchRates = (currencySymbol) => {
-  return (dispatch, getState) => fetch('https://api.exchangeratesapi.io/latest?base=' + currencySymbol)
+export const fetchRates = (currency) => {
+  return (dispatch, getState) => fetch('https://api.exchangeratesapi.io/latest?base=' + currency)
     .then(handleErrors)
     .then((res) => res.json())
     .then((json) => {
