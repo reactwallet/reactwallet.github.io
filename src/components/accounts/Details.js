@@ -12,7 +12,10 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Divider from '@material-ui/core/Divider'
 
+import ErrorPage from '../error/ErrorPage'
 import DepositDialog from './DepositDialog'
+import DeleteAccountDialog from './DeleteAccountDialog'
+import EditAccountDialog from './EditAccountDialog'
 import WithdrawDialog from './WithdrawDialog'
 import TransferDialog from './TransferDialog'
 import { fetchRates } from '../../redux/actions'
@@ -36,59 +39,65 @@ const styles = (theme) => ({
 })
 
 const Details = ({ account, classes, fetchRates, hasOtherAccounts, rates }) => {
-  if (!rates[account.currency]) {
-    fetchRates(account.currency)
-  }
+  if (!account.id) {
+    return (<ErrorPage />)
+  } else {
+    if (!rates[account.currency]) {
+      fetchRates(account.currency)
+    }
 
-  const currencyRatesArr = Object.entries(rates[account.currency] || {}).sort((a, b) => {
-    return a[0] > b[0] ? 1 : -1
-  })
+    const currencyRatesArr = Object.entries(rates[account.currency] || {}).sort((a, b) => {
+      return a[0] > b[0] ? 1 : -1
+    })
 
-  return (
-    <div className={classes.root}>
-      <ListItem>
-        <ListItemText primary="Account" className={classes.term} />
-        <ListItemText primary={account.name} primaryTypographyProps={{className: classes.desc}} />
-      </ListItem>
-      <Divider/>
-      <ListItem>
-        <ListItemText primary="Balance" className={classes.term} />
-        <ListItemText
-          primary={Number(account.value).toFixed(2) + " " + account.currency}
-          primaryTypographyProps={{className: classes.desc}} />
-      </ListItem>
-      <Divider/>
+    return (
+      <div className={classes.root}>
+        <ListItem>
+          <ListItemText primary="Account" className={classes.term} />
+          <ListItemText primary={account.name} primaryTypographyProps={{className: classes.desc}} />
+          <EditAccountDialog account={account} />
+          <DeleteAccountDialog account={account} />
+        </ListItem>
+        <Divider/>
+        <ListItem>
+          <ListItemText primary="Balance" className={classes.term} />
+          <ListItemText
+            primary={Number(account.value).toFixed(2) + " " + account.currency}
+            primaryTypographyProps={{className: classes.desc}} />
+        </ListItem>
+        <Divider/>
 
-      <div className={classes.actions}>
-        <DepositDialog account={account} />
-        <WithdrawDialog account={account} />
-        {
-          hasOtherAccounts &&
-          <TransferDialog fromAccount={account} />
-        }
-      </div>
-      <Divider/>
+        <div className={classes.actions}>
+          <DepositDialog account={account} />
+          <WithdrawDialog account={account} />
+          {
+            hasOtherAccounts &&
+            <TransferDialog fromAccount={account} />
+          }
+        </div>
+        <Divider/>
 
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>All currency rates against the {account.currency}</TableCell>
-            <TableCell align="right">Rate</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {currencyRatesArr.map(([key, value]) => (
-            <TableRow key={key}>
-              <TableCell component="th" scope="row">
-                {key}
-              </TableCell>
-              <TableCell align="right">{value}</TableCell>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>All currency rates against the {account.currency}</TableCell>
+              <TableCell align="right">Rate</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  )
+          </TableHead>
+          <TableBody>
+            {currencyRatesArr.map(([key, value]) => (
+              <TableRow key={key}>
+                <TableCell component="th" scope="row">
+                  {key}
+                </TableCell>
+                <TableCell align="right">{value}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    )
+  }
 }
 
 Details.propTypes = {
@@ -101,7 +110,9 @@ Details.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  account: state.accounts.find((a) => a.id === ownProps.match.params.accountId),
+  account: state.accounts.find((a) => {
+    return a.id === ownProps.match.params.accountId
+  }) || {},
   hasOtherAccounts: state.accounts.length > 1,
   rates: state.rates
 })
