@@ -3,8 +3,10 @@ import { compose } from 'recompose'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
+import ListSubheader from '@material-ui/core/ListSubheader'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -21,9 +23,6 @@ import TransferDialog from './TransferDialog'
 import { fetchRates } from '../../redux/actions'
 
 const styles = (theme) => ({
-  root: {
-    margin: theme.spacing.unit * 3
-  },
   actions: {
     display: 'flex',
     marginBottom: theme.spacing.unit * 3,
@@ -51,7 +50,9 @@ const Details = ({ account, classes, fetchRates, hasOtherAccounts, rates }) => {
     })
 
     return (
-      <div className={classes.root}>
+      <List disablePadding={true}>
+        <ListSubheader disableSticky={true}>Details</ListSubheader>
+        <Divider />
         <ListItem>
           <ListItemText primary="Account" className={classes.term} />
           <ListItemText primary={account.name} primaryTypographyProps={{className: classes.desc}} />
@@ -95,7 +96,7 @@ const Details = ({ account, classes, fetchRates, hasOtherAccounts, rates }) => {
             ))}
           </TableBody>
         </Table>
-      </div>
+      </List>
     )
   }
 }
