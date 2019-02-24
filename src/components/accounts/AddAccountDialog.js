@@ -4,12 +4,13 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import AddIcon from '@material-ui/icons/Add'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import MenuItem from '@material-ui/core/MenuItem'
+import Fab from '@material-ui/core/Fab'
 import TextField from '@material-ui/core/TextField'
 
 import { ALL_CURRENCIES } from '../../lib/constants'
@@ -17,6 +18,11 @@ import { uniqueId } from '../../lib/helpers'
 import { addAccount, addHistory, fetchRates, changeDefaultCurrency } from '../../redux/actions'
 
 const styles = (theme) => ({
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 6,
+    right: theme.spacing.unit * 6
+  },
   dialog: {
     maxWidth: '80%',
     width: 300
@@ -63,7 +69,6 @@ class AddAccountDialog extends React.Component {
 
   handleClose = () => {
     this.setState({ open: false })
-    this.props.onClose()
   }
 
   handleSubmit = () => {
@@ -109,9 +114,9 @@ class AddAccountDialog extends React.Component {
 
     return (
       <>
-        <MenuItem onClick={this.handleOpen} >
-          {this.props.children}
-        </MenuItem>
+        <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.handleOpen}>
+          <AddIcon />
+        </Fab>
         <Dialog
           PaperProps={{className: classes.dialog}}
           open={this.state.open}
@@ -208,8 +213,7 @@ AddAccountDialog.propTypes = {
   defaultCurrency: PropTypes.string.isRequired,
   fetchRates: PropTypes.func.isRequired,
   hasAccounts: PropTypes.bool.isRequired,
-  groups: PropTypes.array.isRequired,
-  onClose: PropTypes.func.isRequired
+  groups: PropTypes.array.isRequired
 }
 
 const mapStateToProps = (state) => ({

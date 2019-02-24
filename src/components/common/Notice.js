@@ -30,7 +30,7 @@ Notice.propTypes = {
   classes: PropTypes.object.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.array.isRequired,
-    PropTypes.string.isRequired,
+    PropTypes.string.isRequired
   ]),
   title: PropTypes.string.isRequired
 }
