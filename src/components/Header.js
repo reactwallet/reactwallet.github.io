@@ -11,7 +11,6 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { Link } from 'react-router-dom'
 
 import AddAccountDialog from './accounts/AddAccountDialog'
-import ResetDialog from './settings/ResetDialog'
 
 const styles = {
   grow: {
@@ -67,7 +66,7 @@ class Header extends React.Component {
           >
             <MenuItem component={AddAccountDialog} onClose={this.handleClose} className={classes.menuItem}>Add Account</MenuItem>
             <MenuItem component={Link} to="/history" onClick={this.handleClose} className={classes.menuItem}>History</MenuItem>
-            <MenuItem component={ResetDialog} onClose={this.handleClose} className={classes.menuItem}>Reset Data</MenuItem>
+            <MenuItem component={Link} to="/settings" onClick={this.handleClose} className={classes.menuItem}>Settings</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

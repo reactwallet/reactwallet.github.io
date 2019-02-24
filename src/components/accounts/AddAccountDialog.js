@@ -12,13 +12,9 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
 
+import { ALL_CURRENCIES } from '../../lib/constants'
 import { uniqueId } from '../../lib/helpers'
 import { addAccount, addHistory, fetchRates, changeDefaultCurrency } from '../../redux/actions'
-
-const allCurrencies = ['AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK',
-'EUR', 'GBP', 'HKD', 'HRK', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW',
-'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD', 'THB',
-'TRY', 'USD', 'ZAR']
 
 const styles = (theme) => ({
   dialog: {
@@ -169,7 +165,7 @@ class AddAccountDialog extends React.Component {
                   native: true
                 }}
               >
-                {allCurrencies.map(currency => (
+                {ALL_CURRENCIES.map(currency => (
                   <option key={currency} value={currency}>
                     {currency}
                   </option>
