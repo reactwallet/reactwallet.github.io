@@ -10,8 +10,6 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { Link } from 'react-router-dom'
 
-import AddAccountDialog from './accounts/AddAccountDialog'
-
 const styles = {
   grow: {
     flexGrow: 1
@@ -36,7 +34,6 @@ class Header extends React.Component {
   }
 
   handleClose = () => {
-    // todo: fix this
     this.setState({ menuAnchorEl: null })
   }
 
@@ -64,7 +61,6 @@ class Header extends React.Component {
             open={Boolean(menuAnchorEl)}
             onClose={this.handleClose}
           >
-            <MenuItem component={AddAccountDialog} onClose={this.handleClose} className={classes.menuItem}>Add Account</MenuItem>
             <MenuItem component={Link} to="/history" onClick={this.handleClose} className={classes.menuItem}>History</MenuItem>
             <MenuItem component={Link} to="/settings" onClick={this.handleClose} className={classes.menuItem}>Settings</MenuItem>
           </Menu>

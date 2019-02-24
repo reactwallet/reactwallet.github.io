@@ -11,6 +11,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 
+import AddAccountDialog from './AddAccountDialog'
 import GroupItem from './GroupItem'
 import Notice from '../common/Notice'
 import TotalBalanceOrProgress from '../common/TotalBalanceOrProgress'
@@ -48,6 +49,7 @@ const GroupList = ({ addHistory, classes, groups, hasAccounts, loadDemoData, fet
 
   return (
     <>
+      <AddAccountDialog />
       { hasAccounts ?
         <List disablePadding={true}>
           <ListSubheader disableSticky={true}>Accounts</ListSubheader>
@@ -62,7 +64,7 @@ const GroupList = ({ addHistory, classes, groups, hasAccounts, loadDemoData, fet
         </List>
         :
         <Notice title="Your wallet is empty">
-          Add accounts from the top menu or
+          Add accounts from the button below or
           &nbsp;
           <Button color="primary" onClick={handleOnClick} className={classes.loadButton}>
             load
