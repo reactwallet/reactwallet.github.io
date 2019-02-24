@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import GroupList from './accounts/GroupList'
 import Details from './accounts/Details'
 import ErrorPage from './error/ErrorPage'
+import SettingsPage from './settings/SettingsPage'
 import Header from './Header'
 import HistoryList from './history/HistoryList'
 
@@ -32,8 +33,9 @@ const RouterMap = ({ classes }) => (
       <Header />
       <Paper className={classes.paper}>
         <Switch>
-          <Route exact path='/' component={GroupList} />
-          <Route path='/history' component={HistoryList} />
+          <Route exact path="/" component={GroupList} />
+          <Route path="/history" component={HistoryList} />
+          <Route path="/settings" component={SettingsPage} />
           <Route path='/details/:accountId' render={(props) => {
             return <Details {...props} />
           }} />

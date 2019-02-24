@@ -10,7 +10,6 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import MenuItem from '@material-ui/core/MenuItem'
 
 import { resetData } from '../../redux/actions'
 
@@ -36,7 +35,6 @@ class ResetDialog extends React.Component {
 
   handleClose = () => {
     this.setState({ open: false })
-    this.props.onClose()
   }
 
   handleSubmit = () => {
@@ -49,9 +47,9 @@ class ResetDialog extends React.Component {
 
     return (
       <div className={classes.root}>
-        <MenuItem onClick={this.handleOpen} >
+        <Button onClick={this.handleOpen} color="secondary" >
           Reset
-        </MenuItem>
+        </Button>
         
         <Dialog
           PaperProps={{className: classes.dialog}}
@@ -59,10 +57,12 @@ class ResetDialog extends React.Component {
           onClose={this.handleClose}
           aria-labelledby="reset-dialog-title"
         >
-          <DialogTitle id="reset-dialog-title">Reset Wallet</DialogTitle>
+          <DialogTitle id="reset-dialog-title">Reset All Data</DialogTitle>
           <DialogContent>
             <DialogContentText className={classes.dialogText}>
-              Are you sure you want to reset the wallet data? This will remove all accounts, rates and history.
+              This action will remove all accounts, rates and history
+              and cannot be undone.<br/><br/>
+              Are you sure?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -83,7 +83,6 @@ class ResetDialog extends React.Component {
 
 ResetDialog.propTypes = {
   classes: PropTypes.object.isRequired,
-  onClose: PropTypes.func.isRequired,
   resetData: PropTypes.func.isRequired
 }
 

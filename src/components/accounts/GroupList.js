@@ -16,9 +16,9 @@ import Notice from '../common/Notice'
 import TotalBalanceOrProgress from '../common/TotalBalanceOrProgress'
 import { addHistory, fetchRates, loadDemoData } from '../../redux/actions'
 
-
 const styles = (theme) => ({
   total: {
+    lineHeight: 1.5,
     fontWeight: 'bold',
     paddingRight: theme.spacing.unit * 7
   },
