@@ -5,22 +5,19 @@ import { compose } from 'recompose'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
+import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import Typography from '@material-ui/core/Typography'
+import ListSubheader from '@material-ui/core/ListSubheader'
 
 import GroupItem from './GroupItem'
+import Notice from '../common/Notice'
 import TotalBalanceOrProgress from '../common/TotalBalanceOrProgress'
 import { addHistory, fetchRates, loadDemoData } from '../../redux/actions'
 
 
 const styles = (theme) => ({
-  empty: {
-    padding: theme.spacing.unit * 3,
-    paddingBottom: 0,
-    textAlign: 'center'
-  },
   total: {
     fontWeight: 'bold',
     paddingRight: theme.spacing.unit * 7
@@ -52,7 +49,9 @@ const GroupList = ({ addHistory, classes, groups, hasAccounts, loadDemoData, fet
   return (
     <>
       { hasAccounts ?
-        <List component="nav">
+        <List disablePadding={true}>
+          <ListSubheader disableSticky={true}>Accounts</ListSubheader>
+          <Divider />
           {groups.map((group) =>
             <GroupItem key={group.id} group={group} />
           )}
@@ -62,19 +61,15 @@ const GroupList = ({ addHistory, classes, groups, hasAccounts, loadDemoData, fet
           </ListItem>
         </List>
         :
-        <>
-          <Typography variant="h5" className={classes.empty} >
-            Your wallet is empty
-          </Typography>
-          <Typography variant="subtitle1" className={classes.empty} >
-            Add accounts from the top menu or<br/>
-            <Button color="primary" onClick={handleOnClick} className={classes.loadButton}>
-              load
-            </Button>
-            &nbsp;
-            some dummy data for demo purposes
-          </Typography>
-        </>
+        <Notice title="Your wallet is empty">
+          Add accounts from the top menu or
+          &nbsp;
+          <Button color="primary" onClick={handleOnClick} className={classes.loadButton}>
+            load
+          </Button>
+          &nbsp;
+          some dummy data for demo purposes
+        </Notice>
       }
     </>
   )
