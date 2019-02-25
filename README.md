@@ -4,11 +4,11 @@
 
 React Wallet is deployed for demo purposes at https://reactwallet.github.io/.
 
-This is a MVP for a web app made with React and Redux. It is bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [Material-UI](https://material-ui.com).
+This is an MVP for a web app made with React and Redux. It is bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [Material-UI](https://material-ui.com).
 
 In the app we can add and store multiple accounts each with its own balance and its own currency. Each account can be opened by clicking on it and we can `Deposit` and `Withdraw` funds from them as well as `Transfer` to another account. Accounts are grouped into a few predefined group categories.
 
-The currency for the first account we create will be set as a default currency and will be used for calculating the balance each group and the total balance from all available accounts. Currency rates are fetched from the [Exchange Rates API](https://exchangeratesapi.io/) when the app is loaded or when an account with a new currency is added.
+The currency for the first account we create will be set as a default currency and will be used for calculating the balance for each group and the total balance from all available accounts. Currency rates are fetched from the [Exchange Rates API](https://exchangeratesapi.io/) when the app is loaded or when an account with a new currency is added.
 
 All actions and data are saved in the `localStorage` so that everything is available after refreshing the browser. The `History` page shows all actions that we've made. And the `Settings` page has an option to change the default currency and for removing everything from the state and the localStorage.
 
