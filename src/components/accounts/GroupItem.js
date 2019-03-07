@@ -18,7 +18,8 @@ import { toggleGroup } from '../../redux/actions'
 const styles = (theme) => ({
   total: {
     fontWeight: 'bold',
-    marginRight: theme.spacing.unit * 2
+    marginRight: theme.spacing.unit * 2,
+    whiteSpace: 'nowrap'
   }
 })
 
@@ -39,7 +40,9 @@ class GroupItem extends React.Component {
           accounts.length > 0 &&
           <React.Fragment key={group.name}>
             <ListItem button onClick={this.handleClick}>
-              <ListItemText primary={group.name} />
+              <ListItemText
+                  primary={group.name}
+                  primaryTypographyProps={{ className: "noWrap" }} />
               <span className={classes.total}>
                 <TotalBalanceOrProgress accounts={accounts} />
               </span>

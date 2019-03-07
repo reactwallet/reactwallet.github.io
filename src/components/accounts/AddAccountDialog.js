@@ -21,7 +21,8 @@ const styles = (theme) => ({
   fab: {
     position: 'fixed',
     bottom: theme.spacing.unit * 6,
-    right: theme.spacing.unit * 6
+    right: theme.spacing.unit * 6,
+    zIndex: 1
   },
   dialog: {
     maxWidth: '80%',

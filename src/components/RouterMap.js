@@ -15,7 +15,6 @@ import HistoryList from './history/HistoryList'
 const styles = (theme) => ({
   paper: {
     width: 'auto',
-    minWidth: 400,
     margin: theme.spacing.unit * 2,
     [theme.breakpoints.up(680)]: {
       width: 600,

@@ -18,8 +18,10 @@ const HistoryList = ({ history }) => (
       {history.map((el, key) =>
         <React.Fragment key={key}>
           <ListItem>
-            <ListItemText primary={el.text} />
-            <ListItemText primary={moment(el.date).calendar()} style={{textAlign: 'right'}} />
+            <ListItemText
+                primary={el.text}
+                secondary={moment(el.date).calendar()}
+                secondaryTypographyProps={{style: {textAlign: 'right'}}}/>
           </ListItem>
           <Divider />
         </React.Fragment>
