@@ -16,6 +16,13 @@ const styles = (theme) => ({
     color: theme.palette.action.active,
     paddingLeft: theme.spacing.unit * 6,
     paddingRight: theme.spacing.unit * 7,
+    [theme.breakpoints.down(375)]: {
+      paddingLeft: theme.spacing.unit * 2,
+      paddingRight: theme.spacing.unit * 2
+    }
+  },
+  value: {
+    whiteSpace: 'nowrap'
   }
 })
 
@@ -23,8 +30,12 @@ const AccountItem = ({ account, classes }) => (
   <>
     <Link to={'/details/' + account.id} className={classes.linkListItem} >
       <ListItem button classes={{ button: classes.listItemButton }}>
-        <ListItemText primary={account.name} />
-        {Number(account.value).toFixed(2) + ' ' + account.currency}
+        <ListItemText
+            primary={account.name}
+            primaryTypographyProps={{ className: "noWrap" }} />
+        <span className={classes.value}>
+          {Number(account.value).toFixed(2) + ' ' + account.currency}
+        </span>
       </ListItem>
     </Link>
     <Divider />

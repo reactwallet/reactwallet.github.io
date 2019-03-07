@@ -23,17 +23,27 @@ import TransferDialog from './TransferDialog'
 import { fetchRates } from '../../redux/actions'
 
 const styles = (theme) => ({
+  listSubheader: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
   actions: {
     display: 'flex',
     marginBottom: theme.spacing.unit * 3,
     marginTop: theme.spacing.unit * 3,
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
+    [theme.breakpoints.down(375)]: {
+      '& svg': {
+        display: 'none'
+      }
+    }
   },
   term: {
     maxWidth: '10em'
   },
   desc: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textAlign: 'right'
   }
 })
 
@@ -51,13 +61,17 @@ const Details = ({ account, classes, fetchRates, hasOtherAccounts, rates }) => {
 
     return (
       <List disablePadding={true}>
-        <ListSubheader disableSticky={true}>Details</ListSubheader>
+        <ListSubheader disableSticky={true} className={classes.listSubheader}>
+          Details
+          <div>
+            <EditAccountDialog account={account} />
+            <DeleteAccountDialog account={account} />
+          </div>
+        </ListSubheader>
         <Divider />
         <ListItem>
           <ListItemText primary="Account" className={classes.term} />
           <ListItemText primary={account.name} primaryTypographyProps={{className: classes.desc}} />
-          <EditAccountDialog account={account} />
-          <DeleteAccountDialog account={account} />
         </ListItem>
         <Divider/>
         <ListItem>
@@ -81,8 +95,7 @@ const Details = ({ account, classes, fetchRates, hasOtherAccounts, rates }) => {
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>All currency rates against the {account.currency}</TableCell>
-              <TableCell align="right">Rate</TableCell>
+              <TableCell colSpan="2">Currency rates against the {account.currency}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

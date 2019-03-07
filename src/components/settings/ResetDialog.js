@@ -17,9 +17,6 @@ const styles = (theme) => ({
   dialog: {
     maxWidth: '80%',
     width: 450
-  },
-  buttonLink: {
-    textDecoration: 'none'
   }
 })
 
@@ -59,7 +56,7 @@ class ResetDialog extends React.Component {
         >
           <DialogTitle id="reset-dialog-title">Reset All Data</DialogTitle>
           <DialogContent>
-            <DialogContentText className={classes.dialogText}>
+            <DialogContentText>
               This action will remove all accounts, rates and history
               and cannot be undone.<br/><br/>
               Are you sure?
@@ -69,7 +66,7 @@ class ResetDialog extends React.Component {
             <Button onClick={this.handleClose}>
               Cancel
             </Button>
-            <Link to="/" className={classes.buttonLink} >
+            <Link to="/" className="noDecoration" >
               <Button onClick={this.handleSubmit} color="secondary">
                 Reset
               </Button>

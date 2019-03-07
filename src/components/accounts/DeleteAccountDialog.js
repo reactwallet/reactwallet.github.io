@@ -20,9 +20,6 @@ const styles = (theme) => ({
   dialog: {
     maxWidth: '80%',
     width: 450
-  },
-  buttonLink: {
-    textDecoration: 'none'
   }
 })
 
@@ -79,7 +76,7 @@ class DeleteAccountDialog extends React.Component {
             <Button onClick={this.handleClose}>
               Cancel
             </Button>
-            <Link to="/" className={classes.buttonLink}>
+            <Link to="/" className="noDecoration">
               <Button onClick={this.handleSubmit} color="secondary">
                 Delete
               </Button>

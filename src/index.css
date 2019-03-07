@@ -13,3 +13,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.noWrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.noDecoration {
+  text-decoration: none;
+}
+
+.inheritColor {
+  color: inherit;
+}

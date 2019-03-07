@@ -14,10 +14,6 @@ const styles = {
   grow: {
     flexGrow: 1
   },
-  link: {
-    textDecoration: 'none',
-    color: 'inherit'
-  },
   menuItem: {
     minWidth: '120px'
   }
@@ -45,7 +41,7 @@ class Header extends React.Component {
       <AppBar position="static" color="primary">
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.grow}>
-            <Link to="/" className={classes.link}>React Wallet</Link>
+            <Link to="/" className="noDecoration inheritColor">React Wallet</Link>
           </Typography>
           <IconButton
             aria-owns={menuAnchorEl ? 'simple-menu' : undefined}
