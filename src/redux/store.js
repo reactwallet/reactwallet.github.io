@@ -3,13 +3,17 @@ import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
 import reducer from './reducers/index'
+import { normalizeState } from '../lib/helpers'
 
 const initialState = {
-  accounts: [],
+  accounts: {},
   history: [],
   rates: {},
   ...JSON.parse(localStorage.getItem('reactwallet'))
 }
+
+initialState.accounts = normalizeState(initialState.accounts)
+initialState.groups = normalizeState(initialState.groups)
 
 const store = createStore(
   reducer,

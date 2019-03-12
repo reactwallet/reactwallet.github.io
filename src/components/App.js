@@ -4,11 +4,12 @@ import { connect } from 'react-redux'
 
 import RouterMap from './RouterMap'
 import { fetchRates } from '../redux/actions'
+import { getAllAccounts } from '../redux/reducers/accounts'
 
 class App extends Component {
   componentDidMount() {
     const currencies = this.props.accounts.map((a) => a.currency)
-    if ([...new Set(currencies)] > 1) {
+    if ([...new Set(currencies)].length > 1) {
       this.props.fetchRates(this.props.defaultCurrency)
     }
   }
@@ -27,7 +28,7 @@ App.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  accounts: state.accounts,
+  accounts: getAllAccounts(state.accounts),
   defaultCurrency: state.settings.defaultCurrency
 })
 

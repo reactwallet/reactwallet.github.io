@@ -21,6 +21,7 @@ import EditAccountDialog from './EditAccountDialog'
 import WithdrawDialog from './WithdrawDialog'
 import TransferDialog from './TransferDialog'
 import { fetchRates } from '../../redux/actions'
+import { getAllAccounts } from '../../redux/reducers/accounts'
 
 const styles = (theme) => ({
   listSubheader: {
@@ -47,7 +48,7 @@ const styles = (theme) => ({
   }
 })
 
-const Details = ({ account, classes, fetchRates, hasOtherAccounts, rates }) => {
+const Details = ({ account, classes, fetchRates, groups, hasOtherAccounts, rates }) => {
   if (!account.id) {
     return (<ErrorPage />)
   } else {
@@ -72,6 +73,11 @@ const Details = ({ account, classes, fetchRates, hasOtherAccounts, rates }) => {
         <ListItem>
           <ListItemText primary="Account" className={classes.term} />
           <ListItemText primary={account.name} primaryTypographyProps={{className: classes.desc}} />
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemText primary="Group" className={classes.term} />
+          <ListItemText primary={(groups.byId[account.groupId]).name} primaryTypographyProps={{className: classes.desc}} />
         </ListItem>
         <Divider/>
         <ListItem>
@@ -124,11 +130,12 @@ Details.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  account: state.accounts.find((a) => {
+  account: getAllAccounts(state.accounts).find((a) => {
     return a.id === ownProps.match.params.accountId
   }) || {},
-  hasOtherAccounts: state.accounts.length > 1,
-  rates: state.rates
+  hasOtherAccounts: state.accounts.allIds.length > 1,
+  rates: state.rates,
+  groups: state.groups
 })
 
 export default compose(

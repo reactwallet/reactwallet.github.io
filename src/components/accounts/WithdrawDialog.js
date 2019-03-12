@@ -59,7 +59,7 @@ class WithdrawDialog extends React.Component {
     })
 
     this.props.addHistory({
-      text: `Withdrew ${this.state.value} ${this.props.account.currency} from\
+      text: `Withdrew ${this.state.value} ${this.props.account.currency} from \
         ${this.props.account.name}`,
       date: moment().format()
     })

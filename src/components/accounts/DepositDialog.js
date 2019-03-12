@@ -52,7 +52,7 @@ class DepositDialog extends React.Component {
     })
 
     this.props.addHistory({
-      text: `Deposited ${this.state.value} ${this.props.account.currency} to\
+      text: `Deposited ${this.state.value} ${this.props.account.currency} to \
         ${this.props.account.name}`,
       date: moment().format()
     })

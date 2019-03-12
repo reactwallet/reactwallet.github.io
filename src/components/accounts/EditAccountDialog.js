@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton'
 import TextField from '@material-ui/core/TextField'
 
 import { editAccount, addHistory } from '../../redux/actions'
+import { getAllGroups } from '../../redux/reducers/groups'
 
 const styles = (theme) => ({
   dialog: {
@@ -160,7 +161,7 @@ EditAccountDialog.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  groups: state.groups
+  groups: getAllGroups(state.groups)
 })
 
 export default compose(

@@ -14,6 +14,8 @@ All actions and data are saved in the `localStorage` so that everything is avail
 
 Tests are incomplete and shown just as an example.
 
+**Dev note**: Because the app is deployed in Github Pages as a user page (i.e. `https://reactwallet.github.io` rather than `https://ishristov.github.io/reactwallet`) the page must be served from the `master` branch. That's the reason the source files are currently in the `source` branch and the `master` contains the `build` folder that is generated after running `npm run build`.
+
 ## Available Scripts
 
 In the project directory, you can run:
