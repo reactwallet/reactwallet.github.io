@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import { getTotalBalance } from '../../lib/helpers'
+import { getAllAccounts } from '../../redux/reducers/accounts'
 
 const TotalBalanceOrProgress = ({ total }) =>  (
   <>
@@ -20,7 +21,7 @@ TotalBalanceOrProgress.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const accounts = ownProps.accounts || state.accounts
+  const accounts = ownProps.accounts || getAllAccounts(state.accounts)
   return {
     total: getTotalBalance(accounts, state.rates, state.settings.defaultCurrency)
   }

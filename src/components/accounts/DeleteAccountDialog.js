@@ -40,7 +40,7 @@ class DeleteAccountDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.deleteAccount(this.props.account.id)
+    this.props.deleteAccount(this.props.account)
 
     this.props.addHistory({
       text: `Removed account ${this.props.account.name}`,

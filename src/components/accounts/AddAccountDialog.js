@@ -16,6 +16,7 @@ import TextField from '@material-ui/core/TextField'
 import { ALL_CURRENCIES } from '../../lib/constants'
 import { uniqueId } from '../../lib/helpers'
 import { addAccount, addHistory, fetchRates, changeDefaultCurrency } from '../../redux/actions'
+import { getAllGroups } from '../../redux/reducers/groups'
 
 const styles = (theme) => ({
   fab: {
@@ -218,9 +219,9 @@ AddAccountDialog.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  hasAccounts: Boolean(state.accounts.length),
+  hasAccounts: state.accounts.allIds.length > 0,
   defaultCurrency: state.settings.defaultCurrency,
-  groups: state.groups,
+  groups: getAllGroups(state.groups),
   rates: state.rates
 })
 

@@ -1,31 +1,50 @@
+import { combineReducers } from 'redux'
 import { uniqueId } from '../../lib/helpers'
 
+// This initialState is used to populate the groups store for the first time,
+// then it goes to the localStorage and will be loaded from there afterwards
 const initialState = [
   'Cash',
   'Cards & Bank Accounts',
   'Debts',
   'Investments',
   'Others'
-].map((name) => ({
-  id: uniqueId(),
-  name
-}))
+].reduce((res, name) => {
+  const id = uniqueId()
+  res.byId[id] = {
+    id,
+    name
+  }
+  res.allIds.push(id)
+  return res
+}, {
+  byId: {},
+  allIds: []
+})
 
-export default (state = initialState, action) => {
+const byId = (state = initialState.byId, action) => {
   switch (action.type) {
     case 'TOGGLE_GROUP': {
-      return state.map((group) => {
-        if (group.id === action.payload.groupId) {
-          return {
-            ...group,
-            collapsed: action.payload.collapsed
-          }
+      return {
+        ...state,
+        [action.payload.groupId]: {
+          ...state[action.payload.groupId],
+          collapsed: action.payload.collapsed
         }
-        return group
-      })
+      }
     }
 
     default:
       return state
   }
 }
+
+const allIds = (state = initialState.allIds) => state
+
+export default combineReducers({
+  byId,
+  allIds
+})
+
+export const getAllGroups = (state) =>
+  state.allIds.map((id) => state.byId[id])

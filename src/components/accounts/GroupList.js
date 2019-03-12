@@ -16,6 +16,7 @@ import GroupItem from './GroupItem'
 import Notice from '../common/Notice'
 import TotalBalanceOrProgress from '../common/TotalBalanceOrProgress'
 import { addHistory, fetchRates, loadDemoData } from '../../redux/actions'
+import { getAllGroups } from '../../redux/reducers/groups'
 
 const styles = (theme) => ({
   total: {
@@ -87,8 +88,8 @@ GroupList.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  hasAccounts: state.accounts.length > 0,
-  groups: state.groups
+  hasAccounts: state.accounts.allIds.length > 0,
+  groups: getAllGroups(state.groups)
 })
 
 export default compose(

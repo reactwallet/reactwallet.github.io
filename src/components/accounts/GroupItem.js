@@ -14,6 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import AccountItem from './AccountItem'
 import TotalBalanceOrProgress from '../common/TotalBalanceOrProgress'
 import { toggleGroup } from '../../redux/actions'
+import { getAllAccounts } from '../../redux/reducers/accounts'
 
 const styles = (theme) => ({
   total: {
@@ -74,7 +75,7 @@ GroupItem.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  accounts: state.accounts.filter((account) => {
+  accounts: getAllAccounts(state.accounts).filter((account) => {
     return account.groupId === ownProps.group.id
   }).sort((a, b) => a.name > b.name ? 1 : -1)
 })

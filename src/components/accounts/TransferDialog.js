@@ -14,6 +14,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import TextField from '@material-ui/core/TextField'
 
 import { makeTransfer, addHistory } from '../../redux/actions'
+import { getAllAccounts } from '../../redux/reducers/accounts'
 
 const styles = (theme) => ({
   dialog: {
@@ -182,7 +183,7 @@ TransferDialog.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  accounts: state.accounts.filter((a) => {
+  accounts: getAllAccounts(state.accounts).filter((a) => {
     return a.id !== ownProps.fromAccount.id
   }).sort((a, b) => a.name > b.name ? 1 : -1),
   rates: state.rates

@@ -23,13 +23,19 @@ it('renders with no accounts', async () => {
 
 it('renders with accounts', async () => {
   const store = createStore(reducer, {
-    accounts: [
-      { name: 'acc 1', id: '_a1', currency: 'BGN', value: 10, groupId: '_g1' },
-      { name: 'acc 2', id: '_a2', currency: 'EUR', value: 5, groupId: '_g1' }
-    ],
-    groups: [
-      { id: '_g1', name: 'Cash' }
-    ],
+    accounts: {
+      byId: {
+        _a1: { name: 'acc 1', id: '_a1', currency: 'BGN', value: 10, groupId: '_g1' },
+        _a2: { name: 'acc 2', id: '_a2', currency: 'EUR', value: 5, groupId: '_g1' }
+      },
+      allIds: ['_a1', '_a2']
+    },
+    groups: {
+      byId: {
+        _g1: { id: '_g1', name: 'Cash' }
+      },
+      allIds: ['_g1']
+    },
     rates: {
       EUR: {
         BGN: 2
